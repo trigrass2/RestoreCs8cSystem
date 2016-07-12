@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="typeCenter" public="true">
+    <description />
+    <paramSection>
+      <param name="x_nY" type="num" byVal="true" />
+      <param name="x_sStr" type="string" byVal="true" />
+      <param name="x_nLength" type="num" byVal="true" />
+      <param name="x_bShow" type="bool" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="lX" type="num" size="1" />
+      <local name="lLenStr" type="num" size="1" />
+      <local name="lStr" type="string" size="1" />
+      <local name="i" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //---------------------------------
+  //  S H O W   O N E   S T R I N G
+  //---------------------------------
+  // type one message in center
+  // of the userPage
+  //
+  // See type()
+  //
+  lLenStr=getDisplayLen(x_sStr)
+  if (lLenStr&gt;x_nLength)
+    // comprime
+    call strlength(x_sStr,x_nLength)
+    lX=(40-x_nLength)/2
+  else
+    // found the median pos
+    lX=20-(lLenStr/2)
+    lStr=x_sStr
+  endIf
+  if x_bShow
+    call type(lX,x_nY,lStr)
+  else
+    for i=1 to lX-1
+      lStr=" "+lStr
+    endFor
+    call strfill(lStr,x_nLength,x_sStr)
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

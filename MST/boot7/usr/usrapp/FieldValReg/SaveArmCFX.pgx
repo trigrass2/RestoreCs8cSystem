@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="SaveArmCFX" public="false">
+    <description />
+    <paramSection />
+    <localSection>
+      <local name="l_sSerialNb" type="string" size="1" />
+      <local name="l_bOk" type="bool" size="1" />
+      <local name="l_sButton" type="string" size="2" />
+      <local name="l_nKey" type="num" size="1" />
+      <local name="l_bCopyDone" type="bool" size="1" />
+      <local name="l_nTouche" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  cls()
+  if bDebug==true
+    l_bCopyDone=true
+    call UP:typeCenter(6,"Arm.cfx backup has not been updated",40,true)
+    delay(1)
+    return
+  endIf
+  l_sSerialNb=getVersion("ArmSN") 
+  if l_sSerialNb=="?"
+    l_sSerialNb="Unknow"
+  endIf
+  //si le fichier existe sur la FD
+  if $fileExists("Usr://configs/arm.cfx")
+    l_bCopyDone=false
+    do
+      //on regarde si on a deja un fichier pour ce robot sur la clef
+      if $fileExists("USB0://BkpValReg/"+l_sSerialNb+"/arm.cfx")
+        l_sButton="Yes"
+        l_sButton[1]="No"
+        do
+          call UP:questionDialog("A backup of "+l_sSerialNb+"/arm.cfx already exist. Replace it ?",l_sButton,l_nKey)
+        until (l_nKey==1) or (l_nKey==2)
+        
+        cls()
+        //on ecrase le fichier existant
+        if l_nKey==1                
+          call UP:typeCenter(6,"Backup in progress, Please wait...",40,true)
+          l_bOk=$copy("Usr://configs/arm.cfx","USB0://BkpValReg/"+l_sSerialNb+"/arm.cfx")  
+        endIf  
+        //ou on ecrase pas 
+        if l_nKey==2
+          l_bCopyDone=true
+          call UP:typeCenter(6,"Arm.cfx backup has not been updated",40,true)
+          delay(1)
+        endIf
+      else
+        //on copi le fichier
+        call UP:typeCenter(6,"Backup in progress, Please wait...",40,true)
+        l_bOk=$copy("Usr://configs/arm.cfx","USB0://BkpValReg/"+l_sSerialNb+"/arm.cfx")  
+      endIf 
+      
+      delay(0.5)
+      //on regarde si la copie s'est bien déroulée
+      if l_bOk
+        call UP:typeCenter(7,"Copy done",40,true) 
+        //copie terminée
+        l_bCopyDone=true  
+        delay(1)       
+      else
+        //si pbm on demande si on ressaye
+        call UP:typeCenter(7,"Error during copy",40,true)   
+        call UP:typeCenter(10,"Do you want to retry copy ?",40,true)   
+        
+        call UP:typeMenu(7,"No")
+        call UP:typeMenu(8,"Yes")
+        
+        l_nTouche=-1
+        while (l_nTouche!=277) and (l_nTouche!=278)
+          l_nTouche=get()
+        endWhile 
+        //on annule la copie
+        if l_nTouche==277
+          l_bCopyDone=true
+        endIf
+      endIf
+      
+      cls()    
+    until (l_bCopyDone==true)        
+  endIf 
+end
+</code>
+    </source>
+  </program>
+</programList>

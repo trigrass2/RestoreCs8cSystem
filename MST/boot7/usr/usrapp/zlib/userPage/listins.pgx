@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="listins" public="true" >
+    <description />
+    <paramSection>
+      <param name="x_sItems" type="string" byVal="false" />
+      <param name="x_nPos" type="num" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="i" type="num" size="1" />
+      <local name="l_nSize" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //
+  // Staubli Copyright 2005
+  //
+  l_nSize=size(sItems)-1
+  if ((x_nPos&gt;=0) and (x_nPos&lt;=l_nSize))
+    for i=0 to (size(x_sItems)-1)
+      if size(sItems)!=1 or sItems!=&quot;&quot;
+        $dins(sItems,x_nPos+i)
+        $dins(bReadWrite,x_nPos+i)
+      endIf
+      sItems[x_nPos+i]=x_sItems[i]
+      // for default the RW is true
+      bReadWrite[x_nPos+i]=true
+    endFor
+  else
+    call listadd(x_sItems)
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

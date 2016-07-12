@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="getStarcVersion" public="false" >
+    <description />
+    <paramSection>
+      <param name="x_nMajor" type="num" byVal="false" />
+      <param name="x_nMidle" type="num" byVal="false" />
+      <param name="x_nMinor" type="num" byVal="false" />
+      <param name="nErr" type="num" byVal="false" />
+      <param name="x_sVers" type="string" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_sFile" type="string" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  x_nMajor=0
+  x_nMidle=0
+  x_nMinor=0
+  x_sVers=&quot;not init&quot;
+  // CHECK IF BACKUP EXIST ON USB
+  //-----------------------------
+  // check if file exist : This instruction returns TRUE if the path points to a file.
+  if ($fileExists(&quot;USB0://starc_backup/versions.cfx&quot;)==true)
+    // Backup exist, so use backup info
+    putln(&quot;Found backup on usb key.&quot;)
+    l_sFile=&quot;USB0://starc_backup/versions.cfx&quot;
+  else
+    // not backup, so use the sys info (current versions.cfx)
+    l_sFile=&quot;Sys://starc/versions.cfx&quot;
+  endIf
+  // READ VERSION FROM SYS
+  //----------------------
+  call extractStrVers(nErr,l_sFile,x_sVers)
+  //  putln(&quot;DBG found str &quot;+x_sVers)
+  if (nErr&gt;=0)
+    call extractNumVers(nErr,x_sVers,x_nMajor,x_nMidle,x_nMinor)
+    //  putln(&quot;DBG found x_mMajor &quot;+toString(&quot;1.0&quot;,x_nMajor))
+    //  putln(&quot;DBG found x_nMidle &quot;+toString(&quot;1.0&quot;,x_nMidle))
+    //  putln(&quot;DBG found x_nMinor &quot;+toString(&quot;1.0&quot;,x_nMinor))
+  endIf
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

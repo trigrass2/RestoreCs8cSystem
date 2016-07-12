@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="start" public="false">
+    <description />
+    <paramSection />
+    <localSection>
+      <local name="l_sFolder" type="string" size="1" />
+      <local name="l_nFound" type="num" size="1" />
+      <local name="l_nKey" type="num" size="1" />
+      <local name="i" type="num" size="1" />
+      <local name="l_bOk" type="bool" size="1" />
+      <local name="l_bEnd" type="bool" size="1" />
+      <local name="l_nKey2" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  // load library of VAL3 function that changed between V6 and V7
+  call use:initLib()
+  call info(l_bEnd)
+  if l_bEnd
+    cls()
+    title("     END    ")
+    return
+  endIf
+  title(" Restore Menu ")
+  l_sFolder=""
+  call findBkp(l_sFolder)
+  if l_sFolder!=""
+    if libList(l_sFolder,sList)
+      l_nFound=0
+      for i=0 to size(sList)-1
+        if sList[i]=="usr" or sList[i]=="USR"
+          l_nFound=l_nFound+1
+        endIf
+        if sList[i]=="sys" or sList[i]=="SYS"
+          l_nFound=l_nFound+2
+        endIf
+      endFor
+      cls()
+      if l_nFound==3
+        gotoxy(0,13)
+        put("USR  SYS  ALL")
+      elseIf l_nFound==2
+        gotoxy(0,13)
+        put("   SYS")
+      elseIf l_nFound==1
+        gotoxy(0,13)
+        put("USR")
+      else
+        cls()
+        popUpMsg("No data in backup !!    END...")
+        return
+      endIf
+      gotoxy(2,9)
+      put("Select partition to restore or  ESC to cancel")
+      l_nKey=get()
+      cls()
+      if l_nKey==272 or l_nKey==273
+        putln("ARE YOU SURE YOU WANT TO OVERWRITE DATA TO CONTROLLER ?")
+        putln("")
+        putln("Press F5 to confirm")
+        putln("Press any key to cancel")
+        l_nKey2=get() 
+        if l_nKey2!=275
+          return
+        endIf 
+        putln("Restoring SYS....")
+        taskCreate "progress",100,progress()
+        l_bOk=$copy(l_sFolder+"sys","Sys://")
+        taskKill("progress")
+        putln("")
+        if l_bOk
+          putln("OK")
+        else
+          putln("KO")
+        endIf
+      endIf
+      if l_nKey==271 or l_nKey==273
+        putln("ARE YOU SURE YOU WANT TO OVERWRITE DATA TO CONTROLLER ?")
+        putln("")
+        putln("Press F5 to confirm")
+        putln("Press any key to cancel")
+        l_nKey2=get()
+        if l_nKey2!=275
+          return
+        endIf 
+        putln("Restoring USR....")
+        taskCreate "progress",100,progress()
+        l_bOk=$copy(l_sFolder+"usr","Usr://")
+        taskKill("progress")
+        putln("")
+        if l_bOk
+          putln("OK")
+          call restoreArmCfx(l_sFolder+"usr/configs/")
+        else
+          putln("KO")
+        endIf
+        
+      endIf
+      
+    endIf
+  endIf
+  
+  
+  title("")
+  popUpMsg("END...")
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

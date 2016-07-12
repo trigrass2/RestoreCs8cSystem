@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="strfill" public="true" >
+    <description />
+    <paramSection>
+      <param name="pStrIn" type="string" byVal="true" />
+      <param name="pLenStrOut" type="num" byVal="true" />
+      <param name="pStrOut" type="string" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="lEmpty" type="string" size="1" />
+      <local name="lLen" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //---------------------------------
+  //  F I L L   O N E   S T R I N G
+  //---------------------------------
+  // To fill the string with space
+  // character
+  //
+  // look for asian message
+  if getDisplayLen(pStrIn)&lt;pLenStrOut
+    // insert some space
+    lEmpty=&quot;                                        &quot;
+    pStrOut=pStrIn
+    lLen=(pLenStrOut-getDisplayLen(pStrIn))
+    call midPos(lEmpty,lLen,0,pStrIn)
+    pStrOut=pStrOut+pStrIn
+  else
+    if getDisplayLen(pStrIn)&gt;pLenStrOut
+      // divide the string
+      call midPos(pStrIn,pLenStrOut,0,pStrOut)
+    else
+      // they are the same
+      pStrOut=pStrIn
+    endIf
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

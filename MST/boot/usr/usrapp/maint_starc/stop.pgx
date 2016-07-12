@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="stop" public="false">
+    <description />
+    <paramSection />
+    <localSection />
+    <source>
+      <code>begin
+  cls()
+  title("")
+  popUpMsg(" -END-  Reboot controller without USB stick")
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

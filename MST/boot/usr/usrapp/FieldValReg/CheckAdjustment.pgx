@@ -1,0 +1,319 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="CheckAdjustment" public="false">
+    <description />
+    <paramSection />
+    <localSection>
+      <local name="l_bResult" type="bool" size="1" />
+      <local name="l_jTemp" type="joint" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  if bStop
+    return
+  endIf
+  cls()
+  title(" Origin Adjustment : Checking ")
+  disablePower()
+  nCurrentLine=1
+  nActualStep=700
+  nPreviousStep=0
+  jWanted={nNoFixed,nNoFixed,nNoFixed,nNoFixed,nNoFixed,nNoFixed}
+  do
+    if nPreviousStep!=nActualStep
+      nPreviousStep=nActualStep
+      switch nActualStep
+        ////////////////////////////
+        // Verification axe 4 &amp; 5 //
+        ////////////////////////////
+        case 700
+          bDisplayPos=false
+          title("Checking Positive/Negative")
+          //Mise en mode manuel
+          sUserMessage="* Move away the counter pointer"+chr(13)+"  Then press enter"    
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          endIf
+        break
+        case 701
+          bDisplayPos=false
+          //Mise en mode manuel
+          bEnablePrevious=false
+          call CheckWorkingMod(l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          endIf
+        break
+        case 702
+          bDisplayPos=false
+          //Mise sous puissance
+          bEnablePrevious=false
+          call CheckIsPowered(l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          endIf
+        break
+        case 703
+          bDisplayPos=true
+          //Mouvement pret du point demandé
+          bEnablePrevious=false
+          bWarningMsg=true
+          sWarningMsg="Joint 5 must be different from 0"
+          jWanted={nNoFixed,nNoFixed,nNoFixed,nNoFixed,nNoFixed,nNoFixed}
+          sUserMessage="* Move the arm close to the destination point"+chr(13)+"  Then press enter"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1   
+            disablePower()         
+          else
+            nActualStep=nActualStep-1
+          endIf          
+          bWarningMsg=false         
+        break
+        case 704     
+          bDisplayPos=false          
+          //Mise en place de la contre pointe
+          bEnablePrevious=true
+          sUserMessage="* Place counter pointer against Z pointer"+chr(13)+"  Then press enter"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+            pCtrl45_1=here(flange,world)
+            pCtrl45_1.config.shoulder=ssame
+            pCtrl45_1.config.elbow=esame
+            pCtrl45_1.config.wrist=wsame
+            jCtrl45_1=herej()
+          else
+            nActualStep=nActualStep-2
+          endIf
+        break
+        case 705   
+          bDisplayPos=false     
+          //Mise en mode manuel
+          bEnablePrevious=true
+          call CheckWorkingMod(l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-1
+          endIf
+        break
+        case 706    
+          bDisplayPos=false      
+          //Mise sous puissance
+          bEnablePrevious=true
+          call CheckIsPowered(l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-2
+          endIf
+        break
+        case 707
+          bDisplayPos=true
+          //Mouvement pret du point demandé
+          bEnablePrevious=true
+          jWanted={nNoFixed,nNoFixed,nNoFixed,nNoFixed,-jCtrl45_1.j5,nNoFixed}
+          sUserMessage="* Move the arm close to the destination point"+chr(13)+"  Then press enter"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-3 
+          endIf
+        break
+        case 708  
+          bDisplayPos=true                       
+          //on verif la position
+          bEnablePrevious=true
+          call CheckPosition(jWanted,0,l_bResult)
+          if pointToJoint(flange,herej(),pCtrl45_1,jWanted)
+            call CheckPosition(jWanted,0,l_bResult)
+            if l_bResult
+              //on sauvegarde la position
+              nActualStep=nActualStep+1
+            else
+              nActualStep=nActualStep-1
+            endIf
+          else
+            nActualStep=nActualStep-1            
+          endIf
+        break
+        case 709 
+          bDisplayPos=true
+          //L'utilisateur corrige manuellement l'erreur
+          bEnablePrevious=true
+          sUserMessage="* Align Z and counter pointer using"+chr(13)+"  world or tool mode"+chr(13)+"  Then press enter"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-2
+          endIf
+        break
+        case 710
+          bDisplayPos=false
+          disablePower()     
+          //calcul de l'erreur
+          pCtrl45_2=here(flange,world)
+          nErreur45=distance(pCtrl45_2,pCtrl45_1)          
+          nActualStep=nActualStep+1
+        break
+        
+        ////////////////////////////
+        // Verification axe 2 &amp; 3 //
+        ////////////////////////////
+        case 711
+          bDisplayPos=false
+          title("Checking Righty/Lefty")
+          //On degage la contre pointe                          
+          sUserMessage="* You can either remove counter pointer or leave it (if the arm can do righty/lefty movement from this point)"+chr(13)+"  Then press enter"    
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          endIf
+        break
+        case 712
+          bDisplayPos=false
+          //Mise en mode manuel
+          bEnablePrevious=false
+          call CheckWorkingMod(l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          endIf
+        break
+        case 713
+          bDisplayPos=false
+          //Mise sous puissance
+          bEnablePrevious=false
+          call CheckIsPowered(l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          endIf
+        break
+        case 714
+          bDisplayPos=true
+          //Mouvement pret du point demandé
+          bEnablePrevious=false
+          bWarningMsg=true
+          sWarningMsg="Jt5 must be different of 0 / Choose Jt1 position to allow +/-180° movment"
+          jWanted={nNoFixed,nNoFixed,nNoFixed,nNoFixed,nNoFixed,nNoFixed}
+          sUserMessage="* Move the arm close to the destination point"+chr(13)+"  Then press enter"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1         
+            disablePower()   
+          else
+            nActualStep=nActualStep-1
+          endIf          
+          bWarningMsg=false         
+        break
+        case 715               
+          bDisplayPos=false
+          //Mise en place de la contre pointe
+          bEnablePrevious=true
+          sUserMessage="* Place counter pointer against Z pointer"+chr(13)+"  Then press enter"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+            pCtrl23_1=here(flange,world)
+            pCtrl23_1.config.shoulder=ssame
+            pCtrl23_1.config.elbow=esame
+            pCtrl23_1.config.wrist=wfree
+            jCtrl23_1=herej()
+          else
+            nActualStep=nActualStep-2
+          endIf
+        break
+        case 716  
+          bDisplayPos=false      
+          //Mise en mode manuel
+          bEnablePrevious=true
+          call CheckWorkingMod(l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-1
+          endIf
+        break
+        case 717          
+          bDisplayPos=false
+          //Mise sous puissance
+          bEnablePrevious=true
+          call CheckIsPowered(l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-2
+          endIf
+        break
+        case 718
+          bDisplayPos=true
+          //Mouvement pret du point demandé
+          bEnablePrevious=true
+          jWanted={nNoFixed,nNoFixed,nNoFixed,nNoFixed,nNoFixed,nNoFixed}
+          sUserMessage="* Change Righty/Lefty configuration"+chr(13)+"  Then press enter"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-3 
+          endIf
+        break
+        case 719      
+          bDisplayPos=true  
+          //on verif la position
+          bEnablePrevious=true
+          if pointToJoint(flange,herej(),pCtrl23_1,jWanted)
+            call CheckPosition(jWanted,0,l_bResult)
+            if l_bResult
+              //on sauvegarde la position
+              nActualStep=nActualStep+1
+            else
+              nActualStep=nActualStep-1
+            endIf
+          else
+            nActualStep=nActualStep-1            
+          endIf
+        break
+        case 720 
+          bDisplayPos=true
+          //L'utilisateur corrige manuellement l'erreur
+          bEnablePrevious=true
+          sUserMessage="* Align Z and counter pointer using"+chr(13)+"  world or tool mode"+chr(13)+"  Then press enter"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-2
+          endIf
+        break
+        case 721
+          bDisplayPos=false
+          disablePower()     
+          //calcul de l'erreur
+          pCtrl23_2=here(flange,world)
+          nErreur23=distance(pCtrl23_2,pCtrl23_1)          
+          nActualStep=722
+        break       
+        case 722
+          bDisplayPos=false
+          //on affiche le resultat à l'utilisateur
+          sUserMessage="Positive/Negative error : "+toString("1.3",nErreur45)+chr(13)+"Righty/Lefty error : "+toString("1.3",nErreur23)+chr(13)+"Press enter"
+          call WaitKey(270,l_bResult) 
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-1
+          endIf           
+        break        
+      endSwitch
+      //on stoppe l'affichage de la position
+      delay(0.5)
+    endIf
+  until (nActualStep&gt;722) or bStop
+end</code>
+    </source>
+  </program>
+</programList>

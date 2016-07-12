@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="selectSN" public="false">
+    <description />
+    <paramSection>
+      <param name="x_sControllerSN" type="string" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_sPath" type="string" size="1" />
+      <local name="l_ni" type="num" size="1" />
+      <local name="l_nKey" type="num" size="1" />
+      <local name="l_nZero" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  put("Choose serial number")
+  call use:type(0,12,"Select and press RETURN")
+  call use:type(0,13,"or press ESC to exit")
+  if libList("USB0://Backups/",sList)
+    call use:listempty()
+    call use:setSizeList(7,1,27,9)
+    call use:listcreate("Select SN")
+    
+    call use:listadd(sList)
+    call use:listupdate(0)
+    do
+      l_nKey=get()
+      // get one input from the list
+      l_nZero=0
+      call use:listevent(l_nKey,l_nZero,x_sControllerSN)
+      if l_nKey==255
+        x_sControllerSN=""
+        return
+      endIf
+      delay(0)
+    until l_nKey==270
+    
+  endIf
+end
+</code>
+    </source>
+  </program>
+</programList>

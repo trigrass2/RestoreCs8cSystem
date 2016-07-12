@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="WaitKey" public="false">
+    <description />
+    <paramSection>
+      <param name="x_nKey" type="num" byVal="true" />
+      <param name="x_Result" type="bool" byVal="false" />
+    </paramSection>
+    <localSection />
+    <source>
+      <code>begin
+  do
+    delay(0)
+  until (nKey==x_nKey) or (bInteruption==true) or (bStop==true)
+  
+  if bInteruption
+    x_Result=false
+    bInteruption=false
+  else
+    x_Result=true
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

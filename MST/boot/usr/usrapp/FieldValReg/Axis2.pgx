@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="Axis2" public="false">
+    <description />
+    <paramSection />
+    <localSection>
+      <local name="l_bResult" type="bool" size="1" />
+      <local name="l_jTemp" type="joint" size="1" />
+      <local name="l_cConfigBras" type="config" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  if bStop
+    return
+    
+  endIf
+  cls()
+  title(" Origin Adjustment : Axis 2 ")
+  disablePower()
+  bEnablePrevious=false
+  nCurrentLine=1
+  nActualStep=200
+  nPreviousStep=0
+  jWanted={nNoFixed,nNoFixed,nNoFixed,nNoFixed,nNoFixed,nNoFixed}
+  do
+    if nPreviousStep!=nActualStep
+      nPreviousStep=nActualStep
+      title(" Origin Adjustment : Axis 2 ["+toString("1",nActualStep-200)+"/"+toString("1",211-200)+"]")
+      switch nActualStep
+        case 200      
+          bDisplayPos=false    
+          sUserMessage="WARNING : joints 3, 4 and 5 must be already adjusted to adjust joint 2 correctly"+chr(13)+"  Enter to continue"+chr(13)+"  F2 to escape"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          endIf
+        break
+        case 201      
+          bDisplayPos=false
+          call UP:clear(0,5)        
+          //On degage la pointe
+          sUserMessage="* Move away the counter pointer"+chr(13)+"  Then press enter"    
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          endIf
+        break      
+        case 202
+          bDisplayPos=false
+          //Mise sous puissance
+          bEnablePrevious=false
+          call CheckIsPowered(l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          endIf
+        break
+        case 203
+          bDisplayPos=true
+          //Mouvement pret du point demandé
+          bEnablePrevious=false
+          bWarningMsg=true
+          sWarningMsg="Choose joint 1 position to allow you + or -180° movement"
+          jWanted={nNoFixed,nNoFixed,90,0,0,0}
+          sUserMessage="* Move the arm close to the destination point"+chr(13)+"  Then press enter"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            l_jTemp=herej()
+            jWanted.j1=l_jTemp.j1
+            jWanted.j2=l_jTemp.j2
+            nActualStep=nActualStep+1                    
+          endIf
+          bWarningMsg=false
+        break
+        case 204
+          bDisplayPos=true
+          //on verif la position
+          bEnablePrevious=true
+          call CheckPosition(jWanted,bOr(nJoint[0],nJoint[1]),l_bResult)
+          if l_bResult
+            //et on la sauvegarde
+            jAdj2_1=herej()
+            l_cConfigBras=config(jAdj2_1)
+            pAdj2_1=here(flange,world)
+            //on inverse la config du point
+            if l_cConfigBras.shoulder==righty
+              pAdj2_1.config.shoulder=lefty
+            else
+              pAdj2_1.config.shoulder=righty
+            endIf
+            if l_cConfigBras.elbow==epositive
+              pAdj2_1.config.elbow=enegative
+            else
+              pAdj2_1.config.elbow=epositive
+            endIf            
+            pAdj2_1.config.wrist=wfree
+            disablePower()
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-1
+          endIf          
+        break
+        case 205      
+          bDisplayPos=false         
+          //Mise en place de la contre pointe
+          bEnablePrevious=true
+          sUserMessage="* Place counter pointer against Z pointer"+chr(13)+"  Then press enter"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-2
+          endIf
+        break
+        case 206       
+          bDisplayPos=false  
+          //Mise sous puissance
+          bEnablePrevious=true
+          call CheckIsPowered(l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-1
+          endIf
+        break
+        case 207
+          bDisplayPos=true
+          //Mouvement pret du point demandé
+          bEnablePrevious=true
+          jWanted={nNoFixed,nNoFixed,nNoFixed,nNoFixed,nNoFixed,nNoFixed}
+          sUserMessage="* Change Righty/Lefty configuration"+chr(13)+"  Then press enter"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-2 
+          endIf
+        break
+        case 208    
+          bDisplayPos=true    
+          //on verif la position
+          bEnablePrevious=true
+          
+          if pointToJoint(flange,herej(),pAdj2_1,jWanted)
+            call CheckPosition(jWanted,nJoint[1],l_bResult)
+            if l_bResult
+              //on sauvegarde la position
+              jAdj2_2=herej()
+              nActualStep=nActualStep+1
+            else
+              nActualStep=nActualStep-1
+            endIf
+          else
+            nActualStep=nActualStep-1            
+          endIf
+        break
+        case 209  
+          bDisplayPos=true
+          //L'utilisateur corrige manuellement l'erreur
+          bEnablePrevious=true
+          sUserMessage="* Align Z and counter pointer using joint 2 movement"+chr(13)+"  Then press enter"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-2
+          endIf
+        break
+        case 210
+          bDisplayPos=false
+          disablePower()     
+          //calcul de l'erreur
+          jActual=herej()
+          nOffset2=(jActual.j2-jAdj2_2.j2)/2
+          sUserMessage="Offset : "+toString("1.3",nOffset2)
+          nActualStep=nActualStep+1
+        break
+        case 211
+          bDisplayPos=false
+          //on demande à l'utilisat
+          call ApplyOffset(l_bResult)
+          if l_bResult
+            l_jTemp=jAdj2_2
+            l_jTemp.j2=l_jTemp.j2+nOffset2
+            $setOffset(l_jTemp)
+            cls()
+            bRefreshScreen=true
+            sUserMessage="Joint 2 adjusted"+chr(13)+"Press enter"
+            bAdjDone[0]=true
+            call WaitKey(270,l_bResult) 
+            if l_bResult
+              nActualStep=nActualStep+1
+            else
+              nActualStep=nActualStep-2
+            endIf 
+          else
+            nActualStep=nActualStep+1
+          endIf  
+        break        
+      endSwitch
+      //on stoppe l'affichage de la position
+      delay(0.5)
+    endIf
+  until (nActualStep&gt;211) or bStop
+end</code>
+    </source>
+  </program>
+</programList>

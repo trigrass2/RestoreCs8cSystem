@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="initLib" public="true">
+    <description />
+    <paramSection />
+    <localSection>
+      <local name="l_sUsbBootPath" type="string" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  // Load addon library
+  if val3Function:libPath()==""
+    if val3Function:libLoad("Disk://zlib/val3Function/val3Function_s6")!=0
+      val3Function:libLoad("Disk://zlib/val3Function/val3Function_s7")
+    endIf
+  endIf
+end</code>
+    </source>
+  </program>
+</programList>

@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="CopyInFD" public="false">
+    <description />
+    <paramSection />
+    <localSection>
+      <local name="l_bOk" type="bool" size="1" />
+      <local name="l_sButton" type="string" size="2" />
+      <local name="l_nKey" type="num" size="1" />
+      <local name="l_bCopyDone" type="bool" size="1" />
+      <local name="l_nTouche" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin  
+  if bDebug==true
+    return
+  endIf
+  
+  //on demande a l'utilisateur si il veut appliquer les données dans le FD
+  l_sButton="Yes"
+  l_sButton[1]="No"
+  do
+    call UP:questionDialog("Do you want to copy new calibration value(s) into FD controler ?",l_sButton,l_nKey)
+  until (l_nKey==1) or (l_nKey==2)
+  
+  cls()
+  
+  if l_nKey==1  
+    do      
+    call UP:typeCenter(6,"Copy into Flash disk, Please wait...",40,true)    
+    l_bOk=$copy("USB0://boot/usr/configs/arm.cfx", "Usr://configs/arm.cfx")  
+    delay(0.5)
+    //on regarde si la copie s'est bien déroulée
+      if l_bOk
+        call UP:typeCenter(7,"Copy done",40,true) 
+        //copie terminée
+        l_bCopyDone=true  
+        //on indique que les données FD et clef sont synchro   
+        bNewValues=false    
+        delay(1)       
+      else
+        //si pbm on demande si on ressaye
+        call UP:typeCenter(7,"Error during copy",40,true)   
+        call UP:typeCenter(10,"Do you want to retry copy ?",40,true)   
+        
+        call UP:typeMenu(7,"No")
+        call UP:typeMenu(8,"Yes")
+        
+        l_nTouche=-1
+        while (l_nTouche!=277) and (l_nTouche!=278)
+          l_nTouche=get()
+        endWhile 
+        //on annule la copie
+        if l_nTouche==277
+          l_bCopyDone=true
+        endIf
+      endIf
+      
+      cls()    
+    until (l_bCopyDone==true)
+  endIf                     
+end
+</code>
+    </source>
+  </program>
+</programList>

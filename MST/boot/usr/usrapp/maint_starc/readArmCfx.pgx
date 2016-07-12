@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="readArmCfx" public="false" >
+    <description>check if tuning is empty string to allow use of last in system.cf</description>
+    <paramSection>
+      <param name="x_nCode" type="num" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_nFile" type="num" size="1" />
+      <local name="l_sLine" type="string" size="10" />
+      <local name="l_nLine" type="num" size="1" />
+      <local name="l_bFound" type="bool" size="1" />
+      <local name="l_nIndex" type="num" size="1" />
+      <local name="l_nMaj" type="num" size="1" />
+      <local name="l_nMid" type="num" size="1" />
+      <local name="l_nMin" type="num" size="1" />
+      <local name="l_sFile" type="string" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  // init
+  l_sFile=&quot;Usr://configs/arm.cfx&quot;
+  l_nFile=0
+  l_nLine=0
+  l_bFound=false
+  l_nIndex=0
+  // check if file exist : This instruction returns TRUE if the path points to a file.
+  if ($fileExists(l_sFile)==false)
+    // arm.cfx doesn&apos;t exists ==&gt; VAL3&lt;5.2
+    call up:type(0,5,&quot;no Arm.cfx, conclusion: VAL3 version is less than 5.2,&quot;)
+    call up:type(0,7,&quot;Update VAL3 version to have update of Starc.&quot;)
+    x_nCode=-1
+    return
+  endIf
+  // open the file : The returned value is an integer in [0-9] that must be used for further file access. If negative, the file could not be open.
+  l_nFile=$fileOpen(l_sFile,&quot;r&quot;)
+  if (l_nFile&lt;0)
+    call up:type(0,5,&quot;Error : reading arm.cfx&quot;)
+    x_nCode=-2
+    return
+  endIf
+  // read first 10 lines and close file
+  // This instruction reads nNbLines lines, stores each line in an entry of the variable nLines, and returns the number of effectively read lines
+  l_nLine=$fileGet(l_nFile,l_sLine,size(l_sLine))
+  $fileClose(l_nFile)
+  // search version in these lines
+  do
+    l_nLine=l_nLine-1
+    //putln(toString(&quot;1&quot;,l_nLine)+&quot;: &quot;+l_sLine[l_nLine])
+    l_nIndex=find(l_sLine[l_nLine],&quot;tuning&quot;)
+    if (l_nIndex&gt;0)
+      if find(l_sLine[l_nLine],sRobotTuning)&gt;0
+        call up:type(0,5,&quot;Impossible to update to last version,&quot;)
+        call up:type(0,6,&quot;Tuning is forced in arm.cfx&quot;)
+        call up:type(0,7,&quot;Edit Arm.cfx to reset tuning and restart this procedure&quot;)
+        x_nCode=-3
+      endIf
+    endIf
+  until (l_nLine&lt;=0)
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

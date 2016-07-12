@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="armDB" public="false">
+    <description />
+    <paramSection>
+      <param name="x_bEnd" type="bool" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_sArm" type="string" size="1" />
+      <local name="l_nDummy" type="num" size="1" />
+      <local name="l_bOk" type="bool" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  x_bEnd=false
+  
+  // extract 2 first letters of arm type
+  l_sArm= right(sRobotType,len(sRobotType)-2)
+  // extract size model
+  
+  toNum(l_sArm,l_nDummy,l_bOk)
+  if l_bOk
+    l_sArm=left(sRobotType,2)+toString("0.0",l_nDummy)
+  else
+    //error
+    x_bEnd=true
+    popUpMsg("Not able to extract arm type")
+    return  
+  endIf
+  
+  if l_sArm=="tx40"
+    bDynMot[1]=bDynMot[2]=true
+    bDynMot[3]=bDynMot[4]=bDynMot[5]=bDynMot[6]=false
+    
+  elseIf l_sArm=="tx60" or l_sArm=="tx90"
+    bDynMot[1]=bDynMot[2]=bDynMot[3]=true
+    bDynMot[4]=bDynMot[5]=bDynMot[6]=false
+    
+  elseIf l_sArm=="rx160"
+    bDynMot[1]=bDynMot[2]=bDynMot[3]=bDynMot[4]=bDynMot[5]=bDynMot[6]=true
+    
+  elseIf l_sArm=="tx200"
+    bDynMot[1]=bDynMot[2]=bDynMot[3]=bDynMot[4]=bDynMot[5]=bDynMot[6]=false
+    
+  elseIf l_sArm=="rs20" or l_sArm=="ts20"
+    bDynMot[1]=bDynMot[2]=bDynMot[3]=bDynMot[4]=true
+    
+  elseIf l_sArm=="rs40" or l_sArm=="rs60" or l_sArm=="rs80"
+    bDynMot[1]=bDynMot[2]=true
+    bDynMot[3]=bDynMot[4]=false
+    
+     elseIf l_sArm=="ts40" or l_sArm=="ts60" or l_sArm=="ts80"
+    bDynMot[1]=bDynMot[2]=false
+    bDynMot[3]=bDynMot[4]=true
+  else
+    popUpMsg("Robot model not supported")
+    x_bEnd=true
+    
+  endIf
+  
+  
+end</code>
+    </source>
+  </program>
+</programList>

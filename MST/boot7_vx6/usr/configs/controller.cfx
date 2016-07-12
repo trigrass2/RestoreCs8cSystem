@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<controller>
+  <String name="testMode" value="013b06f3226318fd" />
+  <String name="mcpMode" value="90a71337e1944e25" />
+  <String name="PaintiXen" value="Demo" />
+  <String name="6axesAbsoluteRobot" value="251359c728e69575" />
+  <String name="VAL 3" value="238f3bbfaf2f4918" />
+  <Bool name="buildBio" value="false" />
+  <Bool name="buildBio2" value="false" />
+  <Bool name="buildMio" value="false" />
+  <Bool name="buildCio" value="false" />
+  <String name="cioBoardConfig" value="" />
+  <Bool name="buildSerial1" value="true" />
+  <Bool name="buildSerial2" value="true" />
+  <Bool name="buildStarc2" value="false" />
+  <starc2Slot index="0"  board="" />
+  <starc2Slot index="1"  board="" />
+  <starc2Slot index="2"  board="" />
+  <uniVALparams>
+    <String name="config" value="axis" />
+    <String name="fieldbus" value="coe" />
+  </uniVALparams>
+  <String name="simulMode" value="real" />
+  <String name="serialNumber" value="F13_5R0EA1_C_01" />
+  <Bool name="buttonWorkingMode" value="true" />
+  <Bool name="traceSignals" value="false" />
+  <Bool name="logging" value="true" />
+  <Float name="powerShutdownDelay" value="-1" />
+  <String name="standardFiles" value="" />
+  <Float name="lliCycleTime" value="-1" />
+  <Float name="powerHourCount" value="63.83193" />
+</controller>

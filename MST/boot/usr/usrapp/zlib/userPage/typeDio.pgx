@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<programList xmlns="ProgramNameSpace" >
+    <program name="typeDio" public="true" >
+        <description></description>
+        <paramSection>
+            <param name="pX" type="num" byVal="true" />
+            <param name="pY" type="num" byVal="true" />
+            <param name="pTest" type="bool" byVal="true" />
+        </paramSection>
+        <localSection>
+        </localSection>
+        <source>
+            <code>
+begin
+  //---------------------------------
+  //  S H O W   S T A T U S   D I O
+  //---------------------------------
+  // Display the status of pTest
+  //
+  //  = true   &quot;[x]&quot;
+  //  = false &quot;[ ]&quot;
+  // See type()
+  //---------------------------------
+  // Staubli copyright 2003
+  //                By CDIA 13 11 18
+  //[Public]-------------------------
+  //
+  if (pTest==true)
+    call type(pX,pY,&quot;[x]&quot;)
+  else
+    call type(pX,pY,&quot;[ ]&quot;)
+  endIf
+end
+            </code>
+        </source>
+    </program>
+</programList>

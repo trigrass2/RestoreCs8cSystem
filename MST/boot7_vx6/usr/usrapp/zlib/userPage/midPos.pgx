@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="midPos" public="true" >
+    <description />
+    <paramSection>
+      <param name="x_sItem" type="string" byVal="true" />
+      <param name="x_nLenght" type="num" byVal="true" />
+      <param name="x_nPos" type="num" byVal="true" />
+      <param name="x_sResult" type="string" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_sLeft" type="string" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  // LEFT SIDE
+  call leftPos(x_sItem,x_nLenght+x_nPos,l_sLeft)
+  // update
+  x_sResult=l_sLeft
+  // RIGHT SIDE
+  call rightPos(l_sLeft,x_nLenght,x_sResult)
+  // OK ....
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

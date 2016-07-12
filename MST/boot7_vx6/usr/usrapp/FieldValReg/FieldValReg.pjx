@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="ProjectNameSpace">
+  <parameters version="s6.8" stackSize="5000" millimeterUnit="true" />
+  <programSection>
+    <program file="_move.pgx" />
+    <program file="ApplyOffset.pgx" />
+    <program file="Axis2.pgx" />
+    <program file="Axis3.pgx" />
+    <program file="Axis4.pgx" />
+    <program file="Axis5.pgx" />
+    <program file="Axis6.pgx" />
+    <program file="CheckAdjustment.pgx" />
+    <program file="CheckArm.pgx" />
+    <program file="CheckIsPowered.pgx" />
+    <program file="CheckPosition.pgx" />
+    <program file="CheckWorkingMod.pgx" />
+    <program file="CopyInFD.pgx" />
+    <program file="DisplayMenu.pgx" />
+    <program file="DisplayMsg.pgx" />
+    <program file="DisplayMsgWarni.pgx" />
+    <program file="DisplayPosition.pgx" />
+    <program file="HMI.pgx" />
+    <program file="Init.pgx" />
+    <program file="RunAdjustement.pgx" />
+    <program file="SaveArmCFX.pgx" />
+    <program file="Selection.pgx" />
+    <program file="start.pgx" />
+    <program file="StepMgr.pgx" />
+    <program file="stop.pgx" />
+    <program file="WaitKey.pgx" />
+  </programSection>
+  <dataSection>
+    <data file="FieldValReg.dtx" />
+  </dataSection>
+  <aliasSection>
+    <alias name="io" interface="io" autoload="true" />
+    <alias name="UP" interface="Disk://zlib/userPage" autoload="true" />
+  </aliasSection>
+</project>

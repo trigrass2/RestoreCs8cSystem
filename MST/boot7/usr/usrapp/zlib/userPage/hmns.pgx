@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="hmns" public="true" >
+    <description />
+    <paramSection>
+      <param name="pSec" type="num" byVal="true" />
+      <param name="pHeure" type="num" byVal="false" />
+      <param name="pMinute" type="num" byVal="false" />
+      <param name="pSeconde" type="num" byVal="false" />
+    </paramSection>
+    <localSection/>
+    <source>
+      <code>begin
+  //---------------------------------
+  //F O R M A T  S T R I N G  H O U R
+  //---------------------------------
+  // Decompose num seconds in num
+  // Hours, minutes, seconds
+  //
+  //
+  //
+  //---------------------------------
+  // Staubli copyright 2003
+  //                By CDIA 13 11 18
+  //[Public]-------------------------
+  //
+  pHeure=roundDown(pSec/3600)
+  pMinute=roundDown((pSec%3600)/60)
+  pSeconde=roundDown(pSec-pHeure*3600-pMinute*60)
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

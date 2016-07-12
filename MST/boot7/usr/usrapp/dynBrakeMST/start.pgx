@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="start" public="false">
+    <description />
+    <paramSection />
+    <localSection>
+      <local name="l_nLinesOff" type="num" size="1" />
+      <local name="i" type="num" size="1" />
+      <local name="l_nKey" type="num" size="1" />
+      <local name="l_nCurrent" type="num" size="1" />
+      <local name="l_bEnd" type="bool" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  
+  // initialise lib for management of imcompatibility between VAL3 V6 &amp; V7
+  call up:initLib()
+  
+    sRobotType=getVersion("ArmType")
+    sRobotTuning=getVersion("Tuning")
+  cls()
+  userPage()
+  
+  // delete arm.cfx from usb to use one from robot
+  // because if the boot is on version &lt;5.2 (arm.cf on flash)
+  // an arm.cfx is created on the USB and will be used for next boot on USB
+  // ==&gt; pb if work on another robot
+  if $fileExists("USB0://boot/usr/configs/arm.cfx")
+    cls()
+    call up:type(0,3,"!! WARNING  arm.cfx file was found on USB stick")
+    call up:type(0,4,"and has been used for booting the system")
+    call up:type(0,5,"Is your robot a : "+sRobotType+sRobotTuning+" ?")
+    call up:type(0,6,"If NO  Press F1 and restart the system")
+    call up:type(0,7,"arm.cfx will be deleted on USB stick")
+    call up:type(0,8,"else press any key")
+    if get()==271
+      $delete("USB0://boot/usr/configs/arm.cfx")
+      cls()
+      call up:type(0,1,"ARM.CFX has been deleted for USB stick")
+      call up:type(0,1,"Reboot with the USB key to have the correct type. Press a key")
+      get()
+      cls()
+      popUpMsg(" END ")
+      return
+    endIf
+  
+  endIf
+  
+  call armDB(l_bEnd)
+  if l_bEnd
+    return
+  endIf
+ 
+  
+  // Lines offset for text centering
+  l_nLinesOff=7
+  
+  userPage()
+  cls()
+  
+  title("Dynamic brake maintenance application")
+  
+  gotoxy(0,2)
+  putln(" WARNING ! the force to maintain")
+  put(" the arm can be very high !")
+  
+  for i=1 to 6
+    gotoxy(i*5-4,13)
+    if bDynMot[i]
+      put("J"+toString("",i))
+    endIf
+  endFor
+  
+    
+  l_nKey=0
+  l_nCurrent=0
+  while true
+    
+    gotoxy(2,l_nLinesOff)
+    if l_nCurrent&gt;0
+      put("Dynamic brake on ")
+     call up:setTextMode(3)
+      put("Joint "+toString("",l_nCurrent))
+      call up:setTextMode(0)
+      put( " is OFF ")
+      gotoxy(l_nCurrent*5-4,13)
+      put("  ")
+      gotoxy(0,10)
+      put("Press any key to enable dyn. brakes")
+
+    else
+      put("All dynamic brakes are ON                 ")
+      gotoxy(0,10)
+      put("                                   ")
+
+      endIf
+      
+      l_nKey=get()-270
+      
+      for i=1 to 6
+        gotoxy(i*5-4,13)
+        if bDynMot[i]
+          put("J"+toString("",i))
+        endIf
+      endFor
+      
+      call enableDB()
+      
+      if (l_nKey&gt;0 and l_nKey&lt;7) and l_nCurrent!=l_nKey
+        //logMsg(toString("",nDynBrkON))
+        
+        
+        if bDynMot[l_nKey]
+          call disableDB(l_nKey)
+          l_nCurrent=l_nKey
+        else
+          l_nCurrent=0
+        endIf
+      else
+        l_nCurrent=0
+        
+      endIf
+      
+      endWhile
+      
+      
+      end
+      
+</code>
+    </source>
+  </program>
+</programList>

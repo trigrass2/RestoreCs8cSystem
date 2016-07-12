@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="listread" public="true" >
+    <description />
+    <paramSection>
+      <param name="pIndex" type="num" byVal="false" />
+      <param name="pItem" type="string" byVal="false" />
+      <param name="pItems" type="num" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="lLen" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //
+  // Staubli Copyright 2003 06 20
+  //
+  lLen=size(sItems)-1
+  if ((pIndex&gt;=0) and (pIndex&lt;=lLen))
+    if (sItems[pIndex]!=&quot;&quot;)
+      pItem=sItems[pIndex]
+    else
+      pIndex=-1
+      pItem=&quot;&quot;
+    endIf
+  else
+    pIndex=-1
+    pItem=&quot;&quot;
+  endIf
+  pItems=lLen
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

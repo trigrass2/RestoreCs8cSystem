@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="Init" public="false">
+    <description />
+    <paramSection />
+    <localSection />
+    <source>
+      <code>begin
+  cls()
+  //on coupe la puissance
+  disablePower()
+  //on initialise l'ecran
+  userPage()
+  cls()
+  //on indique qu'on est en run
+  bAppliRunning=true
+  bStop=false
+  //on init la valeur des offsets
+  nOffset2=0
+  nOffset3=0
+  nOffset4=0
+  nOffset5=0
+  nOffset6=0
+  //et les flag si réglage fait ou non
+  bAdjDone[0]=false
+  bAdjDone[1]=false
+  bAdjDone[2]=false
+  bAdjDone[3]=false
+  bAdjDone[4]=false
+  //on reset les flags
+  bArmIsHSM=false
+  //on charge la librairie v6 ou v7 de UP
+  call UP:initLib()  
+
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

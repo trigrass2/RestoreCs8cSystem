@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="SerialStr2Num" public="false" >
+    <description>extract from string &quot;1.13.2&quot;  num major=1.13 and num minor=2</description>
+    <paramSection>
+      <param name="x_sSerial" type="string" byVal="true" />
+      <param name="x_nMajorVers" type="num" byVal="false" />
+      <param name="x_nMinorVers" type="num" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_bOk" type="bool" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  x_nMajorVers=0
+  x_sSerial=toNum(x_sSerial,x_nMajorVers,l_bOk)
+  if x_sSerial!=&quot;&quot;
+    toNum(mid(x_sSerial,len(x_sSerial)-1,1),x_nMinorVers,l_bOk)
+  else
+    x_nMinorVers=0
+  endIf
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="strfillchr" public="true" >
+    <description />
+    <paramSection>
+      <param name="pStrIn" type="string" byVal="true" />
+      <param name="pStrOut" type="string" byVal="false" />
+      <param name="pChar" type="string" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="lIndex" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //---------------------------------
+  //  F I L L   O N E   S T R I N G
+  //---------------------------------
+  // To fill the string with custom
+  // character
+  //
+  //
+  pStrOut=&quot;&quot;
+  if getDisplayLen(pStrIn)&gt;0
+    for lIndex=0 to (getDisplayLen(pStrIn)-1)
+      pStrOut=pStrOut+pChar
+    endFor
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

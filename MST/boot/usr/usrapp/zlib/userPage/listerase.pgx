@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="listerase" public="true" >
+    <description />
+    <paramSection/>
+    <localSection/>
+    <source>
+      <code>
+begin
+  //
+  // Staubli Copyright 2003 06 20
+  //
+  call listempty()
+  call listframe(&quot;&quot;,topx,topy,bottomx,bottomy,true)
+  index=0
+  last=-1
+  view=0
+  first=0
+  gotoxy(topx,topy)
+  put(&quot; &quot;)
+end
+
+      
+      
+      
+      </code>
+    </source>
+  </program>
+</programList>

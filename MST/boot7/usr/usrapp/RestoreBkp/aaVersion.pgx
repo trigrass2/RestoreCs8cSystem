@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="aaVersion" public="false">
+    <description />
+    <paramSection />
+    <localSection />
+    <source>
+      <code>begin
+  
+  //   V 1.1
+  //  Support backup done with SRS 7
+  // Backup done from CS8 //  Folder = Y-2011 M-09 Dxxxxx.OK
+  // Backup done from SRS 7   Folder = Date of bkp  + in the folder a file backup_OK_xxxx
+  // folder a file called 
+  
+  //  27/09/11
+  
+  
+  
+  //   V 1.0
+  //  initial version
+  //  01/07/09
+  
+end
+</code>
+    </source>
+  </program>
+</programList>

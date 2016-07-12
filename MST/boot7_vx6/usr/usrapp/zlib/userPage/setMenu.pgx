@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="setMenu" public="true" >
+    <description>Show the</description>
+    <paramSection>
+      <param name="x_sMenuName" type="string" byVal="false" />
+      <param name="x_bShowName" type="bool" byVal="true" />
+      <param name="x_nY" type="num" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="i" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //
+  // usage
+  // menuname&quot;choice1,choise2,..choise7,choice8&quot;
+  //
+  // the page will start from the y- line
+  //
+  //
+  if size(x_sMenuName)&lt;10
+    for i=0 to (size(x_sMenuName)-1)
+      if x_sMenuName[i]!=&quot;&quot; and x_sMenuName[i]!=&quot; &quot;
+        if x_bShowName==false
+          call typeMenu(i+1,&quot;F&quot;+toString(&quot;1&quot;,i+1))
+        else
+          call typeMenu(i+1,x_sMenuName[i])
+        endIf
+        if x_nY!=-1
+          call type(0,i+x_nY,(&quot;F&quot;+(toString(&quot;1&quot;,i+1)+&quot; &quot;+x_sMenuName[i])))
+        endIf
+      endIf
+    endFor
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

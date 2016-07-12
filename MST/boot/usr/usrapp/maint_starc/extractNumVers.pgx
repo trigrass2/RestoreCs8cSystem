@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="extractNumVers" public="false" >
+    <description>Extract numeric value from string version</description>
+    <paramSection>
+      <param name="nErr" type="num" byVal="false" />
+      <param name="x_sVersion" type="string" byVal="true" />
+      <param name="x_nMajor" type="num" byVal="false" />
+      <param name="x_nMidle" type="num" byVal="false" />
+      <param name="x_nMinor" type="num" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_nIndex" type="num" size="1" />
+      <local name="l_bOk" type="bool" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  // Tester avec...
+  // --&gt; do not update (too old)
+  // x_sVersion=&quot;0.1 - date&quot;
+  // x_sVersion=&quot;1.13 - date&quot;
+  // --&gt; update
+  // x_sVersion=&quot;1.14 - date&quot;
+  // x_sVersion=&quot;1.15 - date&quot;
+  // x_sVersion=&quot;1.16.4 - date&quot;
+  // --&gt; do not update (no not retrofit)
+  // x_sVersion=&quot;1.16.5 - date&quot;
+  // x_sVersion=&quot;1.16.6 - date&quot;
+  // x_sVersion=&quot;1.17 - date&quot;
+  // x_sVersion=&quot;2.1 - date&quot;
+  // add space after (stop cond for found)
+  x_sVersion=x_sVersion+&quot; &quot;
+  // get Major
+  l_nIndex=find(x_sVersion,&quot;.&quot;)
+  if (l_nIndex&gt;0)
+    toNum(mid(x_sVersion,l_nIndex,0),x_nMajor,l_bOk)
+    x_sVersion=mid(x_sVersion,10,l_nIndex+1)
+    // get Middle
+    l_nIndex=find(x_sVersion,&quot;.&quot;)
+    if (l_nIndex&lt;0)
+      l_nIndex=find(x_sVersion,&quot; &quot;)
+    endIf
+    if (l_nIndex&gt;0) and (l_bOk==true)
+      toNum(mid(x_sVersion,l_nIndex,0),x_nMidle,l_bOk)
+      x_sVersion=mid(x_sVersion,10,l_nIndex+1)
+      // get Minor
+      l_nIndex=find(x_sVersion,&quot;.&quot;)
+      if (l_nIndex&lt;0)
+        l_nIndex=find(x_sVersion,&quot; &quot;)
+      endIf
+      if (l_nIndex&gt;0) and (l_bOk==true)
+        toNum(mid(x_sVersion,l_nIndex,0),x_nMinor,l_bOk)
+      else
+        x_nMinor=0
+      endIf
+    else
+      // pas de . ou &apos; &apos;
+      nErr=-100
+    endIf
+  else
+    // pas un seul &apos;.&apos;
+    nErr=-101
+  endIf
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

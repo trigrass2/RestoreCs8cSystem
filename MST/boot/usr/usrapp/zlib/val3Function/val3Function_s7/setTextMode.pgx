@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="setTextMode" public="true">
+    <description />
+    <paramSection>
+      <param name="x_nMode" type="num" byVal="true" />
+    </paramSection>
+    <localSection />
+    <source>
+      <code>begin
+  setTextMode(x_nMode)
+end</code>
+    </source>
+  </program>
+</programList>

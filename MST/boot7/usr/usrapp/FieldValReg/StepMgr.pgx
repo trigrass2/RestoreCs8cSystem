@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="StepMgr" public="false">
+    <description />
+    <paramSection />
+    <localSection>
+      <local name="l_nKey" type="num" size="1" />
+      <local name="l_sButton" type="string" size="2" />
+    </localSection>
+    <source>
+      <code>begin
+  if bUP==true
+    call UP:setTextMode(1)
+  endIf
+  call UP:typeMenu(5,"UsrP")
+  call UP:setTextMode(0)
+  
+  if bEnablePrevious
+    //on affiche le menu
+    call UP:typeMenu(3,"Prev")
+  else
+    call UP:typeMenu(3,"  ")
+  endIf
+  
+  call UP:typeMenu(2,"Menu")
+  call UP:typeMenu(1,"Quit")
+  
+  //suivant ce qu'on a tapé on avise...  
+  switch nKey
+    case 275
+      bUP=!bUP      
+    break
+    case 273
+      if bEnablePrevious
+        bInteruption=true
+      endIf   
+    break
+    case 272
+      //on stoppe tous les reglages
+      bStop=true
+    break
+    case 271
+      call UP:typeMenu(1,"  ")
+      call UP:typeMenu(2,"  ")
+      call UP:typeMenu(3,"  ")
+      call UP:typeMenu(4,"  ")
+      call UP:typeMenu(5,"  ")
+      call UP:typeMenu(6,"  ")
+      call UP:typeMenu(7,"  ")
+      call UP:typeMenu(8,"  ")  
+      
+      l_sButton="Yes"
+      l_sButton[1]="No"      
+      do        
+        call UP:questionDialog("Do you really want exit application ?",l_sButton,l_nKey)      
+      until (l_nKey==1) or (l_nKey==2)
+      cls()
+      bRefreshScreen=true
+      //on quitte l'application
+      if (l_nKey==1)            
+        bStop=true
+        delay(0.5)
+        bAppliRunning=false
+        delay(0.5)
+        cls()
+      endIf
+    break
+  endSwitch
+end
+</code>
+    </source>
+  </program>
+</programList>

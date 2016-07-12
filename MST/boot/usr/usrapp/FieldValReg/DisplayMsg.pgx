@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="DisplayMsg" public="false">
+    <description />
+    <paramSection>
+      <param name="x_sMessage" type="string" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="l_sTempMess" type="string" size="1" />
+      <local name="l_nbLine" type="num" size="1" />
+      <local name="l_nPosCR" type="num" size="1" />
+      <local name="i" type="num" size="1" />
+      <local name="l_sMsgToDisplay" type="string" size="1" />
+      <local name="l_sTempMess2" type="string" size="1" />
+      <local name="l_bTrouve" type="bool" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //on efface tout l'ecran supérieure
+  for i=0 to 4
+    call UP:clear(0,i)
+  endFor
+  //on regarde si le message comporte plusieur ligne
+  l_sMsgToDisplay=x_sMessage
+  l_nbLine=0
+  do
+    l_nPosCR=find(l_sMsgToDisplay,chr(13))    
+    //si on a CR
+    if l_nPosCR&gt;0
+      //on traite le texte avant le CR
+      l_sTempMess=right(l_sMsgToDisplay,len(l_sMsgToDisplay)-(l_nPosCR+1))
+      l_sMsgToDisplay=left(l_sMsgToDisplay,l_nPosCR)   
+      //on affiche la partie avant le CR   
+      do
+        gotoxy(1,1+l_nbLine)       
+        //on regarde si cette partie du mess tien sur une ligne ou pas
+        if len(l_sMsgToDisplay)&gt;40
+          //on copie la 1ere ligne du message à afficher 
+          l_sTempMess2=left(l_sMsgToDisplay,40)
+          l_sMsgToDisplay=right(l_sMsgToDisplay,len(l_sMsgToDisplay)-40)
+          //on cehrche le premier espace en partant de la fin
+          i=40
+          l_bTrouve=false
+          do 
+            if asc(l_sTempMess2,i)==32
+              l_bTrouve=true
+              //on affiche la partie avant l'espace
+              put(left(l_sTempMess2,i))
+              //on rajoute la partie qui n'a pas pu etre affiche dans le prochain mess a afficher
+              l_sMsgToDisplay=right(l_sTempMess2,len(l_sTempMess2)-i-1)+l_sMsgToDisplay             
+            endIf
+            i=i-1
+          until l_bTrouve or (i&lt;0)
+        else
+          put(l_sMsgToDisplay)
+          l_sMsgToDisplay=""
+        endIf  
+        //on incremente le numero de ligne
+        l_nbLine=l_nbLine+1
+      until len(l_sMsgToDisplay)&lt;1 
+      //et on remet le texte apres le CR dans la variable   
+      l_sMsgToDisplay=l_sTempMess
+    else
+      gotoxy(1,1+l_nbLine)
+      put(l_sMsgToDisplay)
+      l_nbLine=l_nbLine+1
+    endIf
+  until (l_nPosCR&lt;=0)
+end</code>
+    </source>
+  </program>
+</programList>

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="setView" public="true" >
+    <description />
+    <paramSection>
+      <param name="x_bLarge" type="bool" byVal="true" />
+    </paramSection>
+    <localSection/>
+    <source>
+      <code>begin
+  if x_bLarge
+    nTopX[1]=nTopX
+    nTopX=0
+    nBottomX[1]=nBottomX
+    nBottomX=38
+  else
+    nTopX=nTopX[1]
+    nBottomX=nBottomX[1]
+  endIf
+  bUseRefresh=true
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

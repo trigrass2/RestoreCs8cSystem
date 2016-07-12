@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="stringCopy" public="true" >
+    <description>Copy all the value from the x_sCopy to x_sPaste</description>
+    <paramSection>
+      <param name="x_sCopy" type="string" byVal="false" />
+      <param name="x_sPaste" type="string" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="i" type="num" size="1" />
+      <local name="l_nSize" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  // Copy all the value from the first element to the second one
+  //
+  // redim the Paste String ARRAY
+  l_nSize=size(x_sPaste)
+  if size(x_sCopy)&gt;size(x_sPaste)
+    for i=l_nSize to (size(x_sCopy)-1)
+      $dins(x_sPaste,i)
+    endFor
+  else
+    if size(x_sCopy)&lt;size(x_sPaste)
+      for i=size(x_sCopy) to l_nSize-1
+        $ddel(x_sPaste,size(x_sCopy))
+      endFor
+    endIf
+  endIf
+  // COPY ALL THE FIELD
+  for i=0 to (size(x_sCopy)-1)
+    x_sPaste[i]=x_sCopy[i]
+  endFor
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

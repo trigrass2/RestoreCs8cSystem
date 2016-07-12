@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="findBkp" public="false">
+    <description />
+    <paramSection>
+      <param name="x_sPath" type="string" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_nKey" type="num" size="1" />
+      <local name="l_sEvent" type="string" size="1" />
+      <local name="l_ni" type="num" size="1" />
+      <local name="l_sFolder" type="string" size="1" />
+      <local name="l_sPath" type="string" size="1" />
+      <local name="l_sMenuList" type="string" size="30" />
+      <local name="l_nLast" type="num" size="1" />
+      <local name="l_nZero" type="num" size="1" />
+      <local name="l_ni2" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  sControllerSN=getVersion("ControllerSN")
+  if sControllerSN=="?"
+    cls()
+    call use:type(0,0,"Serial number not found for this controller")
+    call use:type(0,2,"Do you want to list backups on USB stick ?")
+    call use:type(3,4,"Press F5 to confirm")
+    call use:type(3,5,"Press any key to cancel")
+    if get()!=275
+      cls()
+      popUpMsg("END...")
+      return
+    endIf
+    cls()
+    call selectSN(sControllerSN)
+    
+  endIf
+  l_sPath="USB0://backups/"+sControllerSN+"/"
+  cls()
+  userPage()
+  if libSave(l_sPath)==0
+    putln("No backup found for this controller Serial Number")
+    libDelete(l_sPath)
+    x_sPath=""
+    return
+  else
+    gotoxy(0,0)
+    put("Backups for controller: ")
+    put(sControllerSN)
+    gotoxy(0,12)
+    putln("Select and press RETURN")
+    put("or press ESC to exit")
+    if libList(l_sPath,sList)
+      call use:listempty()
+      call use:setSizeList(7,1,27,9)
+      call use:listcreate("Select Date")
+      l_nLast=0
+      for l_ni=0 to size(sList)-1
+        if find(sList[l_ni],"OK")!=-1
+          // search for backup done by CS8 : OK is added at end of name
+          l_sMenuList[l_nLast]=sList[l_ni]
+          l_nLast=l_nLast+1
+        else
+          // search for backup done with SRS 7
+          // search for a file BACKUP_OK??????
+          if libList(l_sPath+"/"+sList[l_ni]+"/",sList2)
+            for l_ni2=0 to size(sList2)-1
+              if find(sList2[l_ni2],"backup_OK")!=-1
+                // search for backup done by CS8 : OK is added at end of name
+                l_sMenuList[l_nLast]=sList[l_ni]
+                l_nLast=l_nLast+1
+              endIf
+            endFor
+          endIf
+        endIf
+      endFor
+        call use:listadd(l_sMenuList)
+        call use:listupdate(0)
+        do
+          l_nKey=get()
+          // get one input from the list
+          l_nZero=0
+          call use:listevent(l_nKey,l_nZero,l_sFolder)
+          if l_nKey==255
+            x_sPath=""
+            return
+          endIf
+          delay(0)
+        until l_nKey==270
+        x_sPath=l_sPath+l_sFolder+"/"
+      endIf
+    endIf
+  end
+  
+  </code>
+    </source>
+  </program>
+</programList>

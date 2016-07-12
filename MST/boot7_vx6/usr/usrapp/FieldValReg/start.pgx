@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="start" public="false">
+    <description />
+    <paramSection />
+    <localSection>
+      <local name="l_bResult" type="bool" size="1" />
+      <local name="l_nTouche" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin  
+  pAdj2_1.trsf.x=10
+  
+  call Init()
+  call CheckArm(l_bResult)
+  //si le bras ne correspond pas on sort du programme
+  if l_bResult==true   
+    //on sauvegarde le arm.cfx de la FD sur la clef
+    call SaveArmCFX()
+    //on lance la tache principale
+    taskCreate "Main",100,DisplayMenu()
+    //on lance la tache HMI
+    taskCreate "HMI",100,HMI()
+  else
+    //on indique a l'utilisateur de supprimer le arm.cfx de la clef
+    cls()
+    call UP:typeCenterMulti("Please delete arm.cfx from your MST and reboot controler",3)
+    call UP:typeCenterMulti("Press any key to exit application",7)
+    //on attend que l'utilisateur press une touche
+    l_nTouche=-1
+    while (l_nTouche==-1)
+      l_nTouche=get()
+    endWhile
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="init" public="false">
+    <description />
+    <paramSection>
+      <param name="x_bOk" type="bool" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_sMinorVers" type="string" size="1" />
+      <local name="l_bOk" type="bool" size="1" />
+      <local name="l_nVAL3Vers" type="num" size="1" />
+      <local name="l_nI" type="num" size="1" />
+      <local name="l_bErr" type="bool" size="1" />
+      <local name="l_nFpgaMaj" type="num" size="1" />
+      <local name="l_nFpgaMin" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  call checkArmtype()
+  bBackupDone=false
+  x_bOk=true
+  title(sStrUpdVers+" - System Configuration   ")
+  call up:type(0,0,"All messages are written in logger")
+  sRobotType=getVersion("ArmType")
+  call up:type(1,3,"Robot type is : ")
+  if sRobotType==""
+    call up:type(24,3,"Unknown")
+  else
+    call up:type(24,3,sRobotType)
+  endIf
+  sRobotTuning=getVersion("Tuning")
+  if sRobotTuning==""
+    call up:type(0,5,"Not able to extract Tuning of the arm.")
+    call up:type(0,6,"Verify that this robot is working properly without USB key")
+    x_bOk=false
+    return
+  else
+    call up:type(1,4,"Robot tuning is : ")
+    call up:type(24,4,sRobotTuning)
+  endIf
+  // extract num section of VAL3 version e.i : "6.3.2"
+  //// THis method doesnt work because give version of MST instead of robot
+  ////  sRobotVal3Vers=getVersion("VAL3")
+  ////  for l_nI=1 to 15
+  ////    // try 15x if not found ==&gt; default
+  ////    toNum(sRobotVal3Vers,l_nVAL3Vers,l_bOk)
+  ////    if l_bOk
+  ////      l_nI=15
+  ////    else
+  ////      sRobotVal3Vers=delete(sRobotVal3Vers,1,0)
+  ////    endIf
+  ////  endFor
+  ////  if !l_bOk
+  ////    put("Not able to extract vAL3 version.")
+  ////    x_bOk=false
+  ////    return
+  ////  endIf
+  ////  sRobotVal3Vers=toString(sRobotVal3Vers,l_nVAL3Vers)
+  call getRobVAL3Vers(sRobotVal3Vers)
+  call up:type(1,5,"VAL3 version is : ")
+  call up:type(24,5,sRobotVal3Vers)
+  sArmSN=getVersion("ArmSN")
+  if sArmSN==""
+    sArmSN="unknown"
+  else
+    call filterPath(sArmSN)
+  endIf
+  call up:type(1,6,"Arm serial number is : ")
+  call up:type(24,6,sArmSN)
+  sRobotStarcVers=getVersion("Starc")
+  nStarcMajorVers=0
+  l_sMinorVers=toNum(sRobotStarcVers,nStarcMajorVers,l_bOk)
+  if !l_bOk
+    call up:type(0,8,"Not able to extract STARC version.")
+    call up:type(0,10,"Starc is defective or system is not CS8C")
+    x_bOk=false
+    return
+  endIf
+  title(sStrUpdVers+" - System Configuration")
+  $getStarcFpgaVs(l_nFpgaMaj,l_nFpgaMin)
+  if l_nFpgaMaj==1
+    call up:type(1,7,"Starc 1 board detected")
+  elseIf l_nFpgaMaj==2
+    call up:type(1,7,"Starc 2 board detected")
+  endIf
+  call up:type(1,8,"Starc version is :")
+  call up:type(24,8,sRobotStarcVers)
+  if l_sMinorVers!=""
+    toNum(mid(l_sMinorVers,3,1),nStarcMinorVers,l_bOk)
+  else
+    nStarcMinorVers=0
+  endIf
+  
+  
+  sTimeStamp=getDate("%d%m%Y%H%M%S")
+  call up:type(0,9,"BE SURE THAT ROBOT IS ON REFERENCE")
+  call up:type(0,10,"OR CHECK WITH MCP JOINT POSITIONS")
+  call up:type(0,11,"DON'T MOVE ANYMORE THE ARM")
+  call up:type(0,12,"Calibration can be needed after reboot")
+  call up:type(1,13,"Press ENTER to proceed ..")
+  x_bOk=(get()==270)
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="searchBkp" public="false" >
+    <description />
+    <paramSection>
+      <param name="x_bFound" type="bool" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_i" type="num" size="1" />
+      <local name="l_sUsbBkp" type="string" size="30" />
+      <local name="l_nId" type="num" size="1" />
+      <local name="l_sLine" type="string" size="2" />
+    </localSection>
+    <source>
+      <code>begin
+  l_sLine[0]=&quot;dummy1&quot;
+  l_sLine[1]=&quot;dummy2&quot;
+  if libList(&quot;USB0://bkp/&quot;+sArmSN+&quot;/&quot;,l_sUsbBkp)
+    // dir of ArmSN is found on USB key
+    for l_i=0 to size(l_sUsbBkp)-1
+      if l_sUsbBkp[l_i]!=&quot;&quot;
+        // not empty
+        l_nId=$fileOpen(&quot;USB0://bkp/&quot;+sArmSN+&quot;/timestamp&quot;,&quot;r&quot;)
+        if l_nId&gt;0
+          //read timestamp on USB
+          $fileGet(l_nId,l_sLine[0],1)
+          $fileClose(l_nId)
+        endIf
+        //read timestamp on USR/temp
+        l_nId=$fileOpen(&quot;Usr://temp/timestamp&quot;,&quot;r&quot;)
+        if l_nId&gt;0
+          $fileGet(l_nId,l_sLine[1],1)
+          $fileClose(l_nId)
+        endIf
+      endIf
+    endFor
+  endIf
+  x_bFound=(l_sLine[0]==l_sLine[1])
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

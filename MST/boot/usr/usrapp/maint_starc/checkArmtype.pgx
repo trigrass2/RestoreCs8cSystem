@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="checkArmtype" public="false" >
+    <description />
+    <paramSection/>
+    <localSection/>
+    <source>
+      <code>begin
+  // if arm.cfx is on USB key
+  // check it is build from arm.cf from Flash (&lt; 5.2)
+  // check it is same of arm.cfx from flash
+  // check if file exist : This instruction returns TRUE if the path points to a file.
+  if $fileExists(&quot;Usr://configs/arm.cfx&quot;) and $fileExists(&quot;USB0://boot/usr/configs/arm.cfx&quot;)
+    // compare if same content
+  elseIf $fileExists(&quot;Usr://configs/arm.cf&quot;) and $fileExists(&quot;USB0://boot/usr/configs/arm.cfx&quot;)
+    // check if same robot type
+  endIf
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

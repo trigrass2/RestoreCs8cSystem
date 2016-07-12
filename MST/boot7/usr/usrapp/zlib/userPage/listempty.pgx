@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="listempty" public="true" >
+    <description />
+    <paramSection/>
+    <localSection>
+      <local name="lI" type="num" size="1" />
+      <local name="lLen" type="num" size="1" />
+      <local name="lRun" type="string" size="5" />
+      <local name="lRuni" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //
+  // Staubli Copyright 2003 06 20
+  //
+  lLen=size(sItems)-1
+  for lI=0 to lLen
+    if lI&gt;0
+      $ddel(sItems,0)
+      $ddel(bReadWrite,0)
+    endIf
+  endFor
+  sItems=&quot;&quot;
+  //
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

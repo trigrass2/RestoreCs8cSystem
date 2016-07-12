@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<programList xmlns="ProgramNameSpace" >
+    <program name="listselect" public="true" >
+        <description></description>
+        <paramSection>
+            <param name="pView" type="num" byVal="false" />
+        </paramSection>
+        <localSection>
+            <local name="lLen" type="num" size="1" />
+            <local name="lView" type="num" size="1" />
+        </localSection>
+        <source>
+            <code>
+begin
+  //
+  // Staubli Copyright 2003 06 20
+  //
+  lLen=size(item[0])-1
+  if ((pView&gt;=0) and (pView&lt;=lLen) and (pView&lt;=last))
+    if ((pView&gt;=(first+view)) and (pView&lt;(first+bottomy)))
+      call listcursor(view,false)
+      view=pView-first
+      call listcursor(view,true)
+    else
+      first=pView
+      call listcursor(view,false)
+      view=0
+      call listupdate(first)
+    endIf
+  else
+    pView=-1
+  endIf
+end
+            </code>
+        </source>
+    </program>
+</programList>

@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="copyStarc13" public="false">
+    <description />
+    <paramSection>
+      <param name="x_sUSBPath" type="string" byVal="true" />
+      <param name="x_bOk" type="bool" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_bOk" type="bool" size="1" />
+      <local name="l_sUSBFullPath" type="string" size="1" />
+      <local name="l_nErr" type="num" size="1" />
+      <local name="l_sVersion" type="string" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  cls()
+  title(sStrUpdVers+" - Update Starc to version "+x_sUSBPath)
+  // verify from version.cfx that it is good
+  l_sUSBFullPath="USB0://starc/"+x_sUSBPath+"/versions.cfx"
+  call extractStrVers(l_nErr,l_sUSBFullPath,l_sVersion)
+  if (l_nErr==0) and (x_sUSBPath==l_sVersion)
+    // version on USB is valid
+    if !bBackupDone
+      call backup(l_bOk)
+      bBackupDone=l_bOk
+      if !l_bOk
+        call up:type(0,1,"Backup on USB failed !!!!!!")
+        call up:type(0,2,"If you have your own backup, proceed by F1 key")
+        call up:type(0,3,"else reboot without key to create your backup")
+        if get()!=271
+          x_bOk=false
+          return
+        endIf
+      endIf
+    endIf
+    cls()
+    call up:typeCenter(2,"New starc file copying.........",30,true)
+    call up:typeCenter(5,"DO NOT SWITCH OFF CABINET OR UNPLUG USB KEY",38,true)
+    call copyStarcFile(x_sUSBPath,x_bOk)
+  endIf
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

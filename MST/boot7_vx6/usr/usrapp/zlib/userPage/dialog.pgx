@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="dialog" public="true" >
+    <description />
+    <paramSection>
+      <param name="pMsg" type="string" byVal="true" />
+      <param name="pYes" type="string" byVal="true" />
+      <param name="pNo" type="string" byVal="true" />
+      <param name="pRequest" type="num" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="lExit" type="bool" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //---------------------------------
+  //      D I A L O G    B O X
+  //---------------------------------
+  // Show one dialog box. with an confirm question
+  //
+  call type(0,4,&quot;┌──────────────────────────────────────┐&quot;)
+  call type(0,5,&quot;│                                      │&quot;)
+  call type(0,6,&quot;│                                      │&quot;)
+  call type(0,7,&quot;│                                      │&quot;)
+  call type(0,8,&quot;└──────────────────────────────────────┘&quot;)
+  //
+  // write the message lenght=36
+  //
+  call setString(pMsg,3,5,36)
+  call clear(0,13)
+  call typeMenu(8,true,pYes)
+  call typeMenu(7,true,pNo)
+  lExit=false
+  pRequest=0
+  do
+    //delay(0)
+    keyBoard=get()
+    switch (keyBoard)
+      // YES
+      case 278,270
+        pRequest=1
+      break
+      // No
+      case 277,255
+        pRequest=2
+      break
+      // Cancel
+    endSwitch
+  until (pRequest&gt;0)
+end
+
+      
+      
+      
+      </code>
+    </source>
+  </program>
+</programList>

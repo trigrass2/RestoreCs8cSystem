@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="copySYSTEMcf" public="false" >
+    <description />
+    <paramSection>
+      <param name="x_bOk" type="bool" byVal="false" />
+    </paramSection>
+    <localSection/>
+    <source>
+      <code>begin
+  x_bOk=$copy(&quot;Sys://configs/system.cf&quot;,&quot;USB0://bkp/&quot;+sArmSN+&quot;/system.cf&quot;)
+  if !x_bOk
+    putln(&quot;not enough space on USB to make backup of system.cf, free some space&quot;)
+    return
+  endIf
+  x_bOk=$copy(&quot;USB0://system.cf&quot;,&quot;Sys://configs/system.cf&quot;)
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

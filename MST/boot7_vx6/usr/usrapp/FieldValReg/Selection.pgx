@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="Selection" public="false">
+    <description />
+    <paramSection>
+      <param name="x_nCycle" type="num" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_nTouche" type="num" size="1" />
+      <local name="l_sMess" type="string" size="1" />
+      <local name="l_sButton" type="string" size="2" />
+      <local name="l_nKey" type="num" size="1" />
+      <local name="i" type="num" size="1" />
+      <local name="l_sTemp" type="string" size="1" />
+      <local name="l_nNbAxis" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin 
+  cls()
+  title(" Origin Adjustment : Menu ")
+  //on affiche les possibilés
+  call UP:type(2,1,"Please choose the action :")
+  call UP:type(6,3,"1. Full adjustment")
+  
+  if bArmIsHSM==true
+    l_nNbAxis=5
+  else
+    l_nNbAxis=6
+  endIf
+  
+  for i=2 to l_nNbAxis
+     l_sTemp=toString("1",i)+". Axis "+toString("1",i)
+    if (bAdjDone[i-2]==true)
+      l_sTemp=l_sTemp+" [Done]"
+    endIf
+    call UP:type(6,2+i,l_sTemp)
+  endFor
+  call UP:type(6,9,"7. Check arm adjustment")
+  call UP:type(6,10,"8. Quit")
+  //puis le menu des choix
+  call UP:typeMenu(1,"1")
+  call UP:typeMenu(2,"2")
+  call UP:typeMenu(3,"3")
+  call UP:typeMenu(4,"4")
+  call UP:typeMenu(5,"5")
+  if bArmIsHSM==false
+    call UP:typeMenu(6,"6")
+  endIf
+  call UP:typeMenu(7,"7")
+  call UP:typeMenu(8,"8")
+  //on attend la selection
+  l_nTouche=1
+  while (l_nTouche&lt;271) or (l_nTouche&gt;278)
+    l_nTouche=get()
+    //si on a un robot HSM, on ne regle pas l'axe 6
+    if (l_nTouche==276) and bArmIsHSM
+      l_nTouche=-1
+    endIf
+  endWhile
+  //reinitialise le code de la dernière touche appuyé  
+  getKey()
+    
+  //on retourne le cycle choisi
+  x_nCycle=l_nTouche-270
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

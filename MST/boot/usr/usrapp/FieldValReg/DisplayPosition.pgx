@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="DisplayPosition" public="false">
+    <description />
+    <paramSection>
+      <param name="x_sJointWanted" type="joint" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="l_sJointWanted" type="string" size="6" />
+      <local name="l_jActuel" type="joint" size="1" />
+      <local name="l_nNum1" type="num" size="1" />
+      <local name="l_sJointActual" type="string" size="6" />
+      <local name="i" type="num" size="1" />
+      <local name="l_nJointWanted" type="num" size="6" />
+    </localSection>
+    <source>
+      <code>begin
+  //a la fin on efface tout
+  if jDisplayed!=jWanted
+    call UP:clear(0,7)
+    call UP:clear(0,8)
+    call UP:clear(0,9)
+    call UP:clear(0,10)
+    call UP:clear(0,11)
+    call UP:clear(0,12)
+    jDisplayed=jWanted
+  endIf
+  
+  if bDisplayPos
+    bPosWasDispl=true
+    //recuperation position actuelle
+    l_jActuel=herej()
+    l_sJointActual[0]=toString("6.1",l_jActuel.j1)+""
+    l_sJointActual[1]=toString("6.1",l_jActuel.j2)+""
+    l_sJointActual[2]=toString("6.1",l_jActuel.j3)+""
+    l_sJointActual[3]=toString("6.1",l_jActuel.j4)+""
+    l_sJointActual[4]=toString("6.1",l_jActuel.j5)+""
+    l_sJointActual[5]=toString("6.1",l_jActuel.j6)
+    l_nJointWanted[0]=x_sJointWanted.j1
+    l_nJointWanted[1]=x_sJointWanted.j2
+    l_nJointWanted[2]=x_sJointWanted.j3
+    l_nJointWanted[3]=x_sJointWanted.j4
+    l_nJointWanted[4]=x_sJointWanted.j5
+    l_nJointWanted[5]=x_sJointWanted.j6
+    for i=0 to 5
+      if l_nJointWanted[i]==nNoFixed
+        l_sJointWanted[i]="  x   "
+      elseIf l_nJointWanted[i]==nConstant
+        l_sJointWanted[i]="  C"+toString("1.0",(i+1))+"  "
+      else
+        l_sJointWanted[i]=toString("6.1",l_nJointWanted[i])
+      endIf
+    endFor
+    //on affiche les nouvelles valeurs
+    call UP:type(0,7,"┌──────────────────────────────────────┐")
+    call UP:type(0,8,"│     Curr  Dest           Curr  Dest  │")
+    call UP:type(0,9,"│J1:"+l_sJointActual[0]+"("+l_sJointWanted[0]+")")
+    call UP:type(0,10,"│J2:"+l_sJointActual[1]+"("+l_sJointWanted[1]+")")
+    call UP:type(0,11,"│J3:"+l_sJointActual[2]+"("+l_sJointWanted[2]+")")
+    call UP:type(22,9,"J4:"+l_sJointActual[3]+"("+l_sJointWanted[3]+")")
+    call UP:type(22,10,"J5:"+l_sJointActual[4]+"("+l_sJointWanted[4]+")")
+    if bArmIsHSM==false
+      call UP:type(22,11,"J6:"+l_sJointActual[5]+"("+l_sJointWanted[5]+")")
+    endIf
+    call UP:type(39,9,"│")
+    call UP:type(39,10,"│")
+    call UP:type(39,11,"│")
+    call UP:type(0,12,"└──────────────────────────────────────┘")
+  endIf
+  if (bDisplayPos==false) and (bPosWasDispl==true)
+    call UP:clear(0,7)
+    call UP:clear(0,8)
+    call UP:clear(0,9)
+    call UP:clear(0,10)
+    call UP:clear(0,11)
+    call UP:clear(0,12)
+    bPosWasDispl=false
+  endIf
+
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

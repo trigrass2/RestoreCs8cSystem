@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="info" public="false">
+    <description />
+    <paramSection>
+      <param name="x_bEnd" type="bool" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_nKey" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  userPage()
+  title("Information")
+  cls()
+  gotoxy(0,2)
+  putln("For backup and restore procedure,")
+  putln("you have to be sure that your controller")
+  putln("has the correct date and time")
+  putln("")
+  putln("The current date is :")
+  putln("")
+  putln(getDate("     Y-%Y M-%m D-%d %Hh%Mm"))
+  putln("")
+  putln("To correct, go in Control Panel :")
+  putln("  'Controller configuration'")
+  putln("")
+  put("Press a key to continue")
+  get()
+  cls()
+  gotoxy(0,2)
+  putln("Backup procedure can be done from ")
+  putln("control panel.")
+  putln("")
+  putln("Select 'Controler configuration' and")
+  putln("Use 'F8' = Bkp to make a full backup")
+  putln("on USB stick plugged on USR port(left)")
+  putln("")
+  putln("Press 'F8' to continue with restore")
+  putln("or any key to exit")
+  l_nKey=get()
+  x_bEnd=(l_nKey!=278)
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

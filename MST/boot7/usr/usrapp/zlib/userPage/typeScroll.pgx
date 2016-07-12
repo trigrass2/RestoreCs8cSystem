@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<programList xmlns="ProgramNameSpace" >
+    <program name="typeScroll" public="true" >
+        <description></description>
+        <paramSection>
+            <param name="pX" type="num" byVal="true" />
+            <param name="pY" type="num" byVal="true" />
+            <param name="pStr" type="string" byVal="true" />
+            <param name="pLen" type="num" byVal="true" />
+        </paramSection>
+        <localSection>
+            <local name="lStr" type="string" size="1" />
+            <local name="lpStr" type="string" size="1" />
+        </localSection>
+        <source>
+            <code>
+begin
+  //---------------------------------
+  //  S H O W   O N E   S T R I N G
+  //---------------------------------
+  // Display one message inSide 40
+  // characters (scrolling)
+  //
+  //
+  //
+  //---------------------------------
+  // Staubli copyright 2003
+  //                By CDIA 13 11 18
+  //[Public]-------------------------
+  //
+  if (getDisplayLen(pStr)&gt;pLen)
+    lStr=&quot;&quot;
+    lpStr=pStr+&quot;   &quot;
+    if ((posScroll+3)&lt;=getDisplayLen(lpStr))
+      if (clock()-tpsScroll)&gt;0.05
+        posScroll=posScroll+3
+        tpsScroll=clock()
+      endIf
+    else
+      posScroll=0
+    endIf
+    lStr=&quot;&quot;
+    if ((posScroll+pLen)&gt;(getDisplayLen(lpStr)+2))
+      lStr=&quot;&lt;&quot;+mid(lpStr,pLen,posScroll)
+      lStr=lStr+mid(lpStr,pLen-getDisplayLen(lStr)-1,0)+&quot;&lt;&quot;
+    else
+      lStr=&quot;&lt;&quot;+mid(lpStr,pLen-2,posScroll)+&quot;&lt;&quot;
+    endIf
+  else
+    posScroll=0
+    tpsScroll=clock()
+    call strfill(pStr,pLen,lStr)
+  endIf
+  call type(pX,pY,lStr)
+end
+            </code>
+        </source>
+    </program>
+</programList>

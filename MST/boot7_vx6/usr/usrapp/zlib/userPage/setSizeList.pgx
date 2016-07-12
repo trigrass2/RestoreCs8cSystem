@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="setSizeList" public="true" >
+    <description />
+    <paramSection>
+      <param name="nPx" type="num" byVal="true" />
+      <param name="nPy" type="num" byVal="true" />
+      <param name="nPBottomX" type="num" byVal="true" />
+      <param name="nPBottomY" type="num" byVal="true" />
+    </paramSection>
+    <localSection/>
+    <source>
+      <code>begin
+  nTopX=nTopX[1]=nPx
+  nTopY=nPy
+  nBottomX=nBottomX[1]=nPBottomX
+  nBottomY=nPBottomY
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

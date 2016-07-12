@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="RunAdjustement" public="false">
+    <description />
+    <paramSection>
+      <param name="x_Axis" type="num" byVal="true" />
+    </paramSection>
+    <localSection />
+    <source>
+      <code>begin
+  //on met en route l'affichage
+  bAdjInProgress=true
+  resetMotion()
+  switch x_Axis
+    case 2
+      call Axis2() 
+    break
+    case 3
+      call Axis3() 
+    break
+    case 4
+      call Axis4() 
+    break
+    case 5
+      call Axis5() 
+    break
+    case 6
+      call Axis6() 
+    break
+    case 7
+      call CheckAdjustment()
+    break
+  endSwitch
+  //on stoppe l'affichage
+  bAdjInProgress=false
+  delay(0.5)
+end
+</code>
+    </source>
+  </program>
+</programList>

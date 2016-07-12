@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="isListEmpty" public="true" >
+    <description />
+    <paramSection>
+      <param name="x_bEmpty" type="bool" byVal="false" />
+    </paramSection>
+    <localSection/>
+    <source>
+      <code>begin
+  if size(sItems)==1 and sItems[0]==&quot;&quot;
+    x_bEmpty=true
+  else
+    x_bEmpty=false
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

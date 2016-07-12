@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="restoreArmCfx" public="false">
+    <description />
+    <paramSection>
+      <param name="x_sPath" type="string" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="i" type="num" size="1" />
+      <local name="l_nKey" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  if libList(x_sPath,sList)
+    for i=0 to size(sList)-1
+      // arm.F???.cfx found
+      if find(sList[i],"arm")&gt;-1 and len(sList[i])&gt;9
+        // check if serial is same
+        if find(sList[i],left(sControllerSN,8))&lt;0
+          cls()
+          call use:type(0,0,"Controller Serial is : "+sControllerSN)
+          call use:type(0,1,"File to restore is : "+sList[i])
+          call use:type(0,3,"if you want to overwrite type F5 or ESC to cancel")
+          l_nKey=get()
+          
+          if l_nKey!=275
+            popUpMsg("END...")
+            return
+          endIf
+        endIf
+        
+        call use:type(0,5,"restoring Arm.cfx....")
+        $copy("Usr:///configs/arm.cfx","Usr://configs/arm.old")
+        $copy(x_sPath+sList[i],"Usr://configs/arm.cfx")
+        
+        return
+      endIf
+      
+    endFor
+  endIf
+end
+</code>
+    </source>
+  </program>
+</programList>

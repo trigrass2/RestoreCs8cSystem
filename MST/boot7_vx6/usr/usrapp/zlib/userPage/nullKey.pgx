@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="nullKey" public="true" >
+    <description />
+    <paramSection>
+      <param name="x_nKey" type="num" byVal="false" />
+    </paramSection>
+    <localSection/>
+    <source>
+      <code>begin
+  wait(getKey()==-1)
+  x_nKey=0
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

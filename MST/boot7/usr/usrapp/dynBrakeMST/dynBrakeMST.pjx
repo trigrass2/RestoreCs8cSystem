@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="ProjectNameSpace">
+  <parameters version="s6.8" stackSize="5000" millimeterUnit="true" />
+  <programSection>
+    <program file="aaVersion.pgx" />
+    <program file="armDB.pgx" />
+    <program file="disableDB.pgx" />
+    <program file="enableDB.pgx" />
+    <program file="start.pgx" />
+    <program file="stop.pgx" />
+  </programSection>
+  <dataSection>
+    <data file="dynBrakeMST.dtx" />
+  </dataSection>
+  <aliasSection>
+    <alias name="io" interface="io" autoload="true" />
+    <alias name="up" interface="Disk://zlib/userPage" autoload="true" />
+  </aliasSection>
+</project>

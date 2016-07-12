@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="progress" public="false">
+    <description />
+    <paramSection />
+    <localSection />
+    <source>
+      <code>begin
+  while true
+    delay(1)
+    put(".")
+  endWhile
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

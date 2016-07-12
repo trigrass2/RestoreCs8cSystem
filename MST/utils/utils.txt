@@ -1,0 +1,3 @@
+ld < /bd16/utils/flut_flashutilities.out
+stblStartCs8=0
+flut_init

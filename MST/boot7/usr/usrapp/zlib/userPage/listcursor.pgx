@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="listcursor" public="true">
+    <description />
+    <paramSection>
+      <param name="pView" type="num" byVal="true" />
+      <param name="pShow" type="bool" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="lX" type="num" size="1" />
+      <local name="lY" type="num" size="1" />
+      <local name="message" type="string" size="1" />
+      <local name="l_bEmpty" type="bool" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //
+  // toneage Staubli Copyright 2005
+  //
+  call isListEmpty(l_bEmpty)
+  if !l_bEmpty
+    nView=pView
+    lX=nTopX+1
+    lY=nTopY+1+pView
+    if (nView+nFirst)&gt;(size(sItems)-1)
+      call strfill(sItems[size(sItems)-1],nBottomX,message)
+    else
+      call strfill(sItems[nView+nFirst],nBottomX,message)
+    endIf
+    gotoxy(lX,lY)
+    if (pShow==true)
+      call val3Function:setTextMode(1)
+      put(message)
+      call val3Function:setTextMode(0)
+    else
+      call val3Function:setTextMode(0)
+      put(message)
+    endIf
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

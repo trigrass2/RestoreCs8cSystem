@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="getUsbBootPath" public="true">
+    <description />
+    <paramSection>
+      <param name="x_sUsbBootPah" type="string" byVal="false" />
+    </paramSection>
+    <localSection />
+    <source>
+      <code>begin
+  x_sUsbBootPah="USB0://boot"
+end</code>
+    </source>
+  </program>
+</programList>

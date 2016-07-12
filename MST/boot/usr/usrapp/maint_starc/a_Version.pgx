@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="a_Version" public="false">
+    <description />
+    <paramSection />
+    <localSection />
+    <source>
+      <code>begin
+  sStrUpdVers="v1.0"
+  // Check of Starc Fpga version for last tunings install
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

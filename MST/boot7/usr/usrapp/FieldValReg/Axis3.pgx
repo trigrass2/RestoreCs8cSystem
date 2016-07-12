@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="Axis3" public="false">
+    <description />
+    <paramSection />
+    <localSection>
+      <local name="l_bResult" type="bool" size="1" />
+      <local name="l_jTemp" type="joint" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  if bStop
+    return
+  endIf
+  cls()
+  title(" Origin Adjustment : Axis 3 ")
+  disablePower()
+  bEnablePrevious=false
+  nCurrentLine=1
+  nActualStep=300
+  nPreviousStep=0
+  jWanted={nNoFixed,nNoFixed,nNoFixed,nNoFixed,nNoFixed,nNoFixed}  
+  do
+    if nPreviousStep!=nActualStep
+      nPreviousStep=nActualStep
+      title(" Origin Adjustment : Axis 3 ["+toString("1",nActualStep-300)+"/"+toString("1",311-300)+"]")
+      switch nActualStep
+        case 300      
+          bDisplayPos=false    
+          sUserMessage="WARNING : joints 4 and 5 must be already adjusted to adjust joint 3 correctly"+chr(13)+"  Enter to continue"+chr(13)+"  F2 to escape"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          endIf
+        break
+        case 301      
+          bDisplayPos=false
+          call UP:clear(0,5)               
+          //On degage la pointe
+          sUserMessage="* Move away the counter pointer"+chr(13)+"  Then press enter"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          endIf
+        break
+        case 302
+          bDisplayPos=false
+          //Mise sous puissance
+          bEnablePrevious=false
+          call CheckIsPowered(l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          endIf
+        break
+        case 303
+          bDisplayPos=true
+          //Mouvement pret du point demandé
+          bEnablePrevious=false
+          jWanted={nConstant,nNoFixed,nNoFixed,0,0,0}
+          sUserMessage="* Move the arm close to the destination point"+chr(13)+"  Then press enter"
+          bWarningMsg=true
+          sWarningMsg="You will have to change elbow configuration"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            l_jTemp=herej()
+            jWanted.j1=l_jTemp.j1
+            jWanted.j2=l_jTemp.j2
+            jWanted.j3=l_jTemp.j3
+            nActualStep=nActualStep+1         
+          endIf
+          bWarningMsg=false
+        break
+        case 304
+          bDisplayPos=true
+          //on verif la position
+          bEnablePrevious=true
+          call CheckPosition(jWanted,bOr(bOr(nJoint[0],nJoint[1]),nJoint[2]),l_bResult)
+          if l_bResult
+            //et on la sauvegarde
+            jAdj3_1=herej()
+            disablePower()
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-1
+          endIf          
+        break
+        case 305   
+          bDisplayPos=false            
+          //Mise en place de la contre pointe
+          bEnablePrevious=true
+          sUserMessage="* Place counter pointer against Z pointer"+chr(13)+"  Then press enter"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-2
+          endIf
+        break
+        case 306  
+          bDisplayPos=false        
+          //Mise sous puissance
+          bEnablePrevious=true
+          call CheckIsPowered(l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-1
+          endIf
+        break
+        case 307  
+          bDisplayPos=true              
+          bEnablePrevious=true
+          jWanted={jAdj3_1.j1,nNoFixed,-jAdj3_1.j3,0,0,0}
+          sUserMessage="* Move the arm close to the destination point"+chr(13)+"  Then press enter"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-2
+          endIf
+        break
+        case 308
+          //on verif la position
+          bDisplayPos=true
+          bEnablePrevious=true
+          call CheckPosition(jWanted,nJoint[1],l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+            jAdj3_2=herej()
+          else
+            nActualStep=nActualStep-1
+          endIf
+        break
+        case 309
+          bDisplayPos=true
+          //L'utilisateur corrige manuellement l'erreur
+          bEnablePrevious=true
+          sUserMessage="* Align Z and counter pointer using joint 2 movement"+chr(13)+"  If you see an offset, use joint 3"+chr(13)+"  Then press enter"
+          call WaitKey(270,l_bResult)
+          if l_bResult
+            nActualStep=nActualStep+1
+          else
+            nActualStep=nActualStep-2
+          endIf
+        break
+        case 310
+          bDisplayPos=false
+          disablePower()     
+          //calcul de l'erreur
+          jActual=herej()
+          nOffset3=(jActual.j3-jAdj3_2.j3)/2
+          sUserMessage="Offset : "+toString("1.3",nOffset3)
+          nActualStep=nActualStep+1
+        break
+        case 311
+          bDisplayPos=false
+          //on demande à l'utilisat
+          call ApplyOffset(l_bResult)
+          if l_bResult
+            //on applique l'offset calculé sur l'axe donné
+            l_jTemp=jAdj3_2
+            l_jTemp.j2=jActual.j2
+            l_jTemp.j3=l_jTemp.j3+nOffset3
+            $setOffset(l_jTemp)
+            cls()
+            bRefreshScreen=true
+            sUserMessage="Joint 3 adjusted"+chr(13)+"Press enter"
+            bAdjDone[1]=true
+            nActualStep=nActualStep+1
+            call WaitKey(270,l_bResult) 
+            if l_bResult
+              nActualStep=nActualStep+1
+            else
+              nActualStep=nActualStep-2
+            endIf 
+          else
+            nActualStep=nActualStep+1
+          endIf          
+        break        
+      endSwitch
+      //on stoppe l'affichage de la position
+      delay(0.5)
+    endIf
+  until (nActualStep&gt;311) or bStop
+end
+        
+
+</code>
+    </source>
+  </program>
+</programList>

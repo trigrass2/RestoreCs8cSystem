@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="ProjectNameSpace">
+  <parameters version="s6.5" stackSize="10000" millimeterUnit="true" />
+  <programSection>
+    <program file="a_Version.pgx" />
+    <program file="backup.pgx" />
+    <program file="checkArmtype.pgx" />
+    <program file="copyStarc13.pgx" />
+    <program file="copyStarcFile.pgx" />
+    <program file="copySYSTEMcf.pgx" />
+    <program file="extractNumVers.pgx" />
+    <program file="extractStrVers.pgx" />
+    <program file="filterPath.pgx" />
+    <program file="findStarcOnUSB.pgx" />
+    <program file="getRobVAL3Vers.pgx" />
+    <program file="getStarcVersion.pgx" />
+    <program file="init.pgx" />
+    <program file="readArmCfx.pgx" />
+    <program file="restoreStarc.pgx" />
+    <program file="restoreSYSTEMcf.pgx" />
+    <program file="restorStarcFile.pgx" />
+    <program file="searchBkp.pgx" />
+    <program file="SerialStr2Num.pgx" />
+    <program file="start.pgx" />
+    <program file="stop.pgx" />
+    <program file="upFrom12To13.pgx" />
+    <program file="upToLast.pgx" />
+    <program file="upToLast13.pgx" />
+  </programSection>
+  <dataSection>
+    <data file="maint_starc.dtx" />
+  </dataSection>
+  <aliasSection>
+    <alias name="io" interface="io" autoload="true" />
+    <alias name="up" interface="Disk://zlib/userPage" autoload="true" />
+  </aliasSection>
+</project>

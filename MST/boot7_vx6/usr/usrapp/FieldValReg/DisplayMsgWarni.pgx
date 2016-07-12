@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="DisplayMsgWarni" public="false">
+    <description />
+    <paramSection>
+      <param name="x_sMessage" type="string" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="l_nDelai" type="num" size="1" />
+      <local name="i" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin  
+  //on regarde si le message comporte plusieur ligne  
+  if (nTime+nDelai)&lt;clock()
+    nTime=clock()
+    //si on est pas affiche on affiche
+    if bWarningDisplay==false
+      bWarningDisplay=true
+      nDelai=1
+      call UP:typeCenterMulti(x_sMessage,5)
+    else      
+      //sinon on efface            
+      for i=5 to 6
+        call UP:clear(0,i)
+      endFor
+      bWarningDisplay=false
+      nDelai=0.5
+    endIf
+  endIf
+end
+    
+</code>
+    </source>
+  </program>
+</programList>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="iso-8859-1"?>
+<Config>
+    <!-- Use: 4294967295 (MAX_UINT32) to be able to phase all axes with no boot menu-->
+    <!-- Use: axis number from 1 to 6 (or 4) to be able to phase one axis with no boot menu-->
+    <!-- Use: 0 to get the maintenance boot menu-->
+    <!-- Default value is 0-->
+    <Uint name="axisToAdjust" value="0" />
+    <!-- Use: True to force the option mcpMode-->
+    <!-- The maintenance boot menu allows to change it-->
+    <!-- Default value is False-->
+    <Bool name="mcpMode" value="False" />
+    <!-- Use: True to read the arm.cfx from the USB device-->
+    <!-- Default value is False-->
+    <Bool name="usbArm" value="False" />
+    <!-- Use: True to read the cell.cfx from the USB device-->
+    <!-- Default value is False-->
+    <Bool name="usbCell" value="True" />
+    <!-- Use: True to read the controller.cfx from the USB device-->
+    <!-- Default value is False-->
+    <Bool name="usbController" value="False" />
+    <!-- Use: True to read the system.zfx from the USB device-->
+    <!-- Default value is False-->
+    <Bool name="usbSystem" value="False" />
+    <!-- Use: True to use the starc package from the USB device-->
+    <!-- Default value is False-->
+    <Bool name="usbStarc" value="False" />
+    <!-- Use: "/tyCo/0" to have the error messages on stderr (serial link or telnet)-->
+    <!-- Use: "" to suppress the error messages on stderr (serial link or telnet)-->
+    <!-- Use: "/usbdsk0/boot7/log/myFile.txt" to have no the error messages on the USB device in the file /boot7/log/myFile.txt-->
+    <!-- Default value is "/tyCo/0"-->
+    <String name="standardFiles" value="/tyCo/0" />
+</Config>

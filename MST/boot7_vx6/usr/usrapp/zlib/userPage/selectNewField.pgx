@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="selectNewField" public="true" >
+    <description />
+    <paramSection>
+      <param name="x_nSelected" type="num" byVal="true" />
+      <param name="x_nIndex" type="num" byVal="true" />
+      <param name="x_nView" type="num" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="l_nFirst" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //
+  // SELECT THE NEW ITEM WITH A USER FRIENDLY SYSTEM
+  //
+  //NB -Selected  is the position of the new item
+  //   -Index     is the current position
+  //   -nView     is the current position relative to the screen depth
+  // START
+  //
+  // Update the first value from the parameter
+  l_nFirst=max(x_nIndex-x_nView,0)
+  // Do only an update of the first item
+  if (x_nSelected==-1)
+    nView=x_nView
+    call listupdate(x_nIndex-x_nView)
+  else
+    //
+    //  select the new field
+    if x_nSelected&lt;l_nFirst or abs(x_nSelected-l_nFirst)&gt;=(nBottomY)
+      //Start from the beginnnig
+      if x_nSelected&lt;l_nFirst and x_nSelected&lt;nBottomY
+      // start from the beginnnig
+        nView=x_nSelected
+        call listupdate(0)
+      else
+        if x_nSelected&lt;=size(sItems)-nBottomY
+          // move the list and select the field in the middle
+          nView=roundUp(nBottomY/2)
+        else
+          nView=x_nSelected-(size(sItems)-nBottomY)
+        endIf
+        call listupdate(abs(x_nSelected-nView))
+      endIf
+    else
+      // move only the nView of the field
+      nView=abs(x_nSelected-l_nFirst)
+      call listupdate(abs(x_nIndex-x_nView))
+    endIf
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="getMenu" public="true" >
+    <description>set the function button using the menu string</description>
+    <paramSection>
+      <param name="x_sMenu" type="string" byVal="false" />
+      <param name="x_bUseMenu" type="bool" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="i" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //
+  // STAUBLI Application
+  // set the x_bUseMenu using the Menu
+  // array string
+  //
+  for i=0 to (size(x_bUseMenu)-1)
+    x_bUseMenu[i]=false
+    if (size(x_sMenu)-1)&gt;=i
+      if x_sMenu[i]!=&quot;&quot;
+        // active the button
+        x_bUseMenu[i]=true
+      endIf
+    endIf
+  endFor
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

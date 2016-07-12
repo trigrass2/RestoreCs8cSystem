@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="setString" public="false" >
+    <description />
+    <paramSection>
+      <param name="sParMessage" type="string" byVal="true" />
+      <param name="nParLine" type="num" byVal="true" />
+      <param name="nParStartLine" type="num" byVal="true" />
+      <param name="nParLength" type="num" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="nFlag" type="num" size="1" />
+      <local name="i" type="num" size="1" />
+      <local name="sSwap" type="string" size="1" />
+      <local name="nTotalFlag" type="num" size="1" />
+      <local name="temp" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //
+  //  using:
+  // sParMessage-&gt;  the message you want print to video
+  // sParLine-&gt;     the number of the line you want use
+  // sParStartLine-&gt;the start line
+  // nParLength-&gt;   the lenght of the string
+  //
+   temp=len(sParMessage)
+  if (len(sParMessage)&lt;=nParLength)
+      call typeLen(2,nParStartLine +1,sParMessage,nParLength)
+  else
+    do
+      sSwap=sParMessage
+      if len(sParMessage)&gt;nParLength and nParLine&gt;=1
+      //
+      // search for the space then return
+      //
+        nTotalFlag=0
+        do
+          nFlag=find(sSwap,&quot; &quot;)
+          if nFlag!=-1
+            sSwap=right(sSwap,len(sSwap)-nFlag-1)
+            nTotalFlag=nTotalFlag+nFlag+1
+          endIf
+        until nTotalFlag&gt;nParLength or nFlag==-1
+        //
+        // divide the string
+        //
+        sSwap=left(sParMessage,nTotalFlag-nFlag-1)
+        sParMessage=right(sParMessage,len(sParMessage)-(nTotalFlag-nFlag-1))
+        call typeLen(2,nParStartLine,sSwap,nParLength)
+        nParStartLine=nParStartLine+1
+        nParLine=nParLine-1
+      else
+        call typeLen(2,nParStartLine,sSwap,nParLength)
+        nParLine=0
+      endIf
+   until nParLine==0
+  endIf
+end
+
+      
+      
+      
+      </code>
+    </source>
+  </program>
+</programList>

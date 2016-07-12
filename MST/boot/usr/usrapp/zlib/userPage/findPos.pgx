@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="findPos" public="true" >
+    <description />
+    <paramSection>
+      <param name="x_sItem1" type="string" byVal="true" />
+      <param name="x_sItem2" type="string" byVal="true" />
+      <param name="x_nPos" type="num" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_nPos" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  // find the char using getDisplayLen
+  l_nPos=find(x_sItem1,x_sItem2)
+  if l_nPos!=-1
+    x_nPos=getDisplayLen(left(x_sItem1,l_nPos))
+  else
+    x_nPos=-1
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

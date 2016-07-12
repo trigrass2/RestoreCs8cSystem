@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="backup" public="false">
+    <description />
+    <paramSection>
+      <param name="x_bOk" type="bool" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_bOk" type="bool" size="1" />
+      <local name="l_nId" type="num" size="1" />
+      <local name="l_nRet" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  x_bOk=true
+  call filterPath(sArmSN)
+  cls()
+  call up:typeCenter(1,"** Backup procedure **",30,true)
+  call up:type(0,3,"Backup will be done in USB key,")
+  call up:type(0,4," in folder "+"bkp/"+sArmSN+"/")
+  call up:type(0,5,"first, deleting old backup...")
+  $delete("USB0://bkp/"+sArmSN+"/")
+  call up:type(0,6,"starc backup, don't switch off the controller...")
+  l_bOk=$copy("Sys://Starc","USB0://bkp/"+sArmSN+"/Starc")
+  x_bOk=x_bOk and l_bOk
+  if $fileExists("Usr://configs/arm.cfx")
+    call up:type(0,8,"arm.cfx backup, don't switch off the controller...")
+    l_bOk=$copy("Usr://configs/arm.cfx","USB0://bkp/"+sArmSN+"/arm.cfx")
+    x_bOk=x_bOk and l_bOk
+  endIf
+  //    if $fileExists("Sys://configs/options.cfx")
+  //    call up:type(0,8,"options.cfx backup, don't switch off the controller...")
+  //    l_bOk=$copy("Sys://configs/options.cfx","USB0://bkp/"+sArmSN+"/options.cfx")
+  //    x_bOk=x_bOk and l_bOk
+  //  endIf
+  if $fileExists("Usr://configs/arm.cf")
+    call up:type(0,10,"arm.cf backup, don't switch off the controller...")
+    $copy("Usr://configs/arm.cf","USB0://bkp/"+sArmSN+"/arm.cf")
+  endIf
+  // generate time stamp
+  // 1st on USB key
+  l_nId=$fileOpen("USB0://bkp/"+sArmSN+"/timestamp","w")
+  if l_nId&gt;0
+    l_nRet=$fileSet(l_nId,sTimeStamp,1)
+    $fileClose(l_nId)
+  endIf
+  x_bOk=x_bOk and (bAnd(l_nId,l_nRet)&gt;0)
+  // 2nd on USR/temp
+  l_bOk=$copy("USB0://bkp/"+sArmSN+"/timestamp","Usr://temp/timestamp")
+  x_bOk=x_bOk and l_bOk
+  call up:type(0,12,"Backup done, press a key to proceed")
+  get()
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

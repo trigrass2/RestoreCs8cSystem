@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="listredraw" public="true" >
+    <description />
+    <paramSection>
+      <param name="pFirst" type="num" byVal="true" />
+    </paramSection>
+    <localSection/>
+    <source>
+      <code>begin
+  //
+  // Staubli Copyright 2003 06 20
+  //
+  call listframe(sTitle,nTopX,nTopY,nBottomX,nBottomY)
+  call listupdate(pFirst)
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

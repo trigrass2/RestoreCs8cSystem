@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="CheckIsPowered" public="false">
+    <description />
+    <paramSection>
+      <param name="x_bResult" type="bool" byVal="false" />
+    </paramSection>
+    <localSection />
+    <source>
+      <code>begin
+  while (!(isPowered())) and (bInteruption==false) and (bStop==false)
+    //Mise sous puissance
+    sUserMessage="* Power the arm"
+  endWhile
+  
+  if bInteruption
+    x_bResult=false
+    bInteruption=false
+  else
+    x_bResult=true
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

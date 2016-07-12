@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<programList xmlns="ProgramNameSpace" >
+    <program name="liststatus" public="true" >
+        <description></description>
+        <paramSection>
+            <param name="pMsg" type="string" byVal="true" />
+        </paramSection>
+        <localSection>
+            <local name="lLenMsg" type="num" size="1" />
+            <local name="lStr" type="string" size="1" />
+            <local name="lStrLine" type="string" size="1" />
+            <local name="lValue" type="num" size="1" />
+            <local name="lX" type="num" size="1" />
+            <local name="lY" type="num" size="1" />
+        </localSection>
+        <source>
+            <code>
+begin
+  //
+  // Staubli Copyright 2003 06 20
+  //
+  lLenMsg=getDisplayLen(pMsg)+2
+  lValue=((bottomx/2)-(lLenMsg/2))
+  lY=topy+bottomy+1
+  lX=topx+1
+  lStrLine=&quot;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ&quot;
+  Show=(getDisplayLen(pMsg)&gt;0)
+  if Show
+    lStr=mid(lStrLine,lValue,0)
+    lStr=lStr+&quot;&lt;&quot;+pMsg+&quot;&gt;&quot;
+    lStr=lStr+mid(lStrLine,lValue,0)
+  else
+    lStr=mid(lStrLine,bottomx,0)
+  endIf
+  gotoxy(lX,lY)
+  put(lStr)
+end
+            </code>
+        </source>
+    </program>
+</programList>

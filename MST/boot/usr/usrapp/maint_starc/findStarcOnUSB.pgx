@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="findStarcOnUSB" public="false" >
+    <description>Find a valid STARC version on USB to be installed</description>
+    <paramSection>
+      <param name="x_nMajor" type="num" byVal="true" />
+      <param name="x_sPathFound" type="string" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_sUsbVersions" type="string" size="30" />
+      <local name="l_nUsbMajorVers" type="num" size="1" />
+      <local name="l_nUsbMinorVers" type="num" size="1" />
+      <local name="l_i" type="num" size="1" />
+      <local name="l_sUsbMinorVers" type="string" size="1" />
+      <local name="l_bOk" type="bool" size="1" />
+      <local name="l_nMajorMax" type="num" size="1" />
+      <local name="l_nMinorMax" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  x_sPathFound=&quot;&quot;
+  if libList(&quot;USB0://Starc/&quot;,l_sUsbVersions)
+    // browse each dir under starc
+    for l_i=0 to size(l_sUsbVersions)-1
+      if l_sUsbVersions[l_i]!=&quot;&quot;
+        call SerialStr2Num(l_sUsbVersions[l_i],l_nUsbMajorVers,l_nUsbMinorVers)
+        if x_nMajor==0
+          // search for the lastest
+          if l_nMajorMax&lt;l_nUsbMajorVers
+            x_sPathFound=l_sUsbVersions[l_i]
+            l_nMajorMax=l_nUsbMajorVers
+            l_nMinorMax=l_nUsbMinorVers
+            // major are equals and minor on USB is higher
+          elseIf (l_nMajorMax==l_nUsbMajorVers) and (l_nMinorMax&lt;l_nUsbMinorVers)
+            x_sPathFound=l_sUsbVersions[l_i]
+            l_nMajorMax=l_nUsbMajorVers
+            l_nMinorMax=l_nUsbMinorVers
+          endIf
+        else
+          //search for a version on same branch
+          if (x_nMajor==l_nUsbMajorVers)
+            x_sPathFound=l_sUsbVersions[l_i]
+          endIf
+        endIf
+      endIf
+    endFor
+  endIf
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

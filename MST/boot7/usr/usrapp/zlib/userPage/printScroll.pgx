@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="printScroll" public="false" >
+    <description />
+    <paramSection/>
+    <localSection>
+      <local name="i" type="num" size="1" />
+      <local name="lX" type="num" size="1" />
+      <local name="lY" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //
+  // put the scrool
+  //
+  if size(sItems)&gt;nBottomY
+    // find the percentage
+    //windows style
+    //i=(size(sItems)-nBottomY+1)/(nFirst+1)
+    // nokia style
+    i=(size(sItems))/(nFirst+nView+1)
+    lX=nTopX+nBottomX+1
+    lY=roundUp((nBottomY)/i+nTopY)
+    for i=nTopY+1 to nBottomY
+      gotoxy(lX,i)
+      if i==lY
+        //
+        put(&quot;■&quot;)
+        //
+      else
+        put(&quot;│&quot;)
+      endIf
+    endFor
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

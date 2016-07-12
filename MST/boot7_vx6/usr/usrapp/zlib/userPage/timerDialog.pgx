@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="timerDialog" public="true">
+    <description />
+    <paramSection>
+      <param name="x_sMsg" type="string" byVal="true" />
+      <param name="x_nTime" type="num" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="l_nTime" type="num" size="1" />
+      <local name="l_nStartLine" type="num" size="1" />
+      <local name="l_nLine" type="num" size="1" />
+      <local name="i" type="num" size="1" />
+      <local name="l_sMessage" type="string" size="1" />
+      <local name="l_sTemp" type="string" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //
+  // use for other task
+  //
+  if watch(bShowDialog==false,2)==false
+    bShowDialog=false
+    logMsg("error dialog resoursing")
+    return
+  else
+    setMutex(bShowDialog)
+    //
+    //call listempty()
+    //
+    l_nTime=clock()
+    call stringCopy(x_sMsg,sMessage)
+    call divideString(sMessage,l_nLine)
+    l_nStartLine=round(5-l_nLine/2)
+    do
+      // Start LINE
+      call type(0,l_nStartLine-2,"┌──────────────────────────────────────┐")
+      call type(0,l_nStartLine-1,"│                                      │")
+      // write the message
+      for i=0 to l_nLine
+        call type(0,l_nStartLine+i,l_sTemp)
+        call type(39,l_nStartLine+i,l_sTemp)
+        //call typeCenter(i+l_nStartLine,sMessage[i],38,false)
+        l_sMessage=sMessage[i]
+        call typeCenter(i+l_nStartLine,l_sMessage,38,false)
+        call type(0,l_nStartLine+i,"│"+l_sMessage+"│")
+      endFor
+      // end LINE
+      call type(0,l_nStartLine+l_nLine+1,"│                                      │")
+      call type(0,l_nStartLine+l_nLine+2,"└──────────────────────────────────────┘")
+      // release
+      if x_nTime==0
+        delay(0.1)
+      else
+        delay(0)
+      endIf
+    until (clock()-l_nTime)&gt;=x_nTime
+    //
+    bShowDialog=false
+    bUseRefresh=true
+    delay(0)
+  endIf
+  // bLocking=false
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

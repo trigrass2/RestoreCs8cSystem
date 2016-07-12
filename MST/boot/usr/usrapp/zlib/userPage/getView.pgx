@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="getView" public="true" >
+    <description />
+    <paramSection>
+      <param name="x_bView" type="bool" byVal="false" />
+    </paramSection>
+    <localSection/>
+    <source>
+      <code>begin
+  if nBottomX==38
+    x_bView=true
+  else
+    x_bView=false
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

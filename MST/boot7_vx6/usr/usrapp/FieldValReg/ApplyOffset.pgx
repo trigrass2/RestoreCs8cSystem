@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="ApplyOffset" public="false">
+    <description />
+    <paramSection>
+      <param name="x_bResult" type="bool" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_nKey" type="num" size="1" />
+      <local name="l_sButton" type="string" size="2" />
+    </localSection>
+    <source>
+      <code>begin
+  l_sButton="Yes"
+  l_sButton[1]="No"
+  do
+    call UP:questionDialog("Do you want apply offset ?",l_sButton,l_nKey)
+  until (l_nKey==1) or (l_nKey==2)
+  
+  call UP:typeMenu(8,"   ")
+  call UP:typeMenu(7,"   ")
+  
+    
+  if l_nKey==1
+    cls()
+    x_bResult=true
+    call UP:typeCenter(6,"Please wait...",40,true)
+    //on indique qu'on a fait appliqué un offset (pour la sauvegarde sur FD)
+    bNewValues=true
+  endIf
+  
+  if l_nKey==2
+    x_bResult=false
+  endIf
+  
+  delay(0.5)
+end
+</code>
+    </source>
+  </program>
+</programList>

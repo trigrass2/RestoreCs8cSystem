@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="copyStarcFile" public="false" >
+    <description />
+    <paramSection>
+      <param name="x_sUsbDir" type="string" byVal="true" />
+      <param name="x_bOk" type="bool" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_bOk" type="bool" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //call checkFreeSpace()
+  x_bOk=true
+  $delete(&quot;Sys://Starc&quot;)
+  l_bOk=$copy(&quot;USB0://starc/&quot;+x_sUsbDir,&quot;Sys://Starc&quot;)
+  x_bOk=x_bOk and l_bOk
+  l_bOk=$copy(&quot;USB0://bkp/&quot;+sArmSN+&quot;/Starc/lib&quot;,&quot;Sys://Starc/lib&quot;)
+  x_bOk=x_bOk and l_bOk
+  return
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

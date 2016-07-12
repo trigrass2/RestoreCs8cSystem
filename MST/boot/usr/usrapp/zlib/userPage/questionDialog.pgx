@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="questionDialog" public="true" >
+    <description />
+    <paramSection>
+      <param name="x_sMsg" type="string" byVal="true" />
+      <param name="x_sButton" type="string" byVal="false" />
+      <param name="x_nResult" type="num" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="lExit" type="bool" size="1" />
+      <local name="nLine" type="num" size="1" />
+      <local name="i" type="num" size="1" />
+      <local name="nStartLine" type="num" size="1" />
+      <local name="l_sMessage" type="string" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //---------------------------------
+  //      D I A L O G    B O X
+  //---------------------------------
+  //
+  // Show one dialog box. with an confirm question
+  //
+  if watch(bShowDialog==false,2)==false
+    bShowDialog=false
+    logMsg(&quot;error dialog resoursing&quot;)
+    return
+  else
+    setMutex(bShowDialog)
+    //call listempty()
+    //
+    //
+    if x_sMsg!=&quot;&quot;
+      call stringCopy(x_sMsg,sMessage)
+      call divideString(sMessage,nLine)
+      nStartLine=round(5-nLine/2)
+      // Start LINE
+      call type(0,nStartLine-2,&quot;┌──────────────────────────────────────┐&quot;)
+      call type(0,nStartLine-1,&quot;│                                      │&quot;)
+      // write the message
+      for i=0 to nLine
+        //call type(0,nStartLine+i,&quot;                                      &quot;)
+        //call typeCenter(i+nStartLine,sMessage[i],38)
+        l_sMessage=sMessage[i]
+        call typeCenter(i+nStartLine,l_sMessage,38,false)
+        call type(0,nStartLine+i,&quot;│&quot;+l_sMessage+&quot;│&quot;)
+      endFor
+      // end LINE
+      call type(0,nStartLine+nLine+1,&quot;│                                      │&quot;)
+      call type(0,nStartLine+nLine+2,&quot;└──────────────────────────────────────┘&quot;)
+    endIf
+    // write the button message
+    call clear(0,13)
+    for i=0 to size(x_sButton)-1
+      call typeMenu(8-i,x_sButton[i])
+    endFor
+    lExit=false
+    x_nResult=-100
+    do
+      nKey=get()
+      switch (nKey)
+        case 270
+          x_nResult=0
+        break
+        case 255
+          x_nResult=-1
+        break
+        default
+          // look if the button press is defined
+          if (nKey&gt;=271 and nKey&lt;=278) and ((279-nKey)&lt;=size(x_sButton))
+            if x_sButton[278-nKey]!=&quot;&quot;
+              x_nResult=279-nKey
+            endIf
+          endIf
+        break
+      endSwitch
+      delay(0)
+    until (x_nResult!=-100)
+    //
+    call nullKey(nKey)
+    //
+    // release
+    bShowDialog=false
+    bUseRefresh=true
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="getRobVAL3Vers" public="false" >
+    <description>extract Version from version.cfx file</description>
+    <paramSection>
+      <param name="x_sVersion" type="string" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_nFile" type="num" size="1" />
+      <local name="l_sLine" type="string" size="10" />
+      <local name="l_nLine" type="num" size="1" />
+      <local name="l_nIndex" type="num" size="1" />
+      <local name="l_sFile" type="string" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //    &lt;CS8Version&gt;s6.5&lt;/CS8Version&gt;
+  // init
+  l_sFile=&quot;Sys://templates/versions.cfx&quot;
+  x_sVersion=&quot; before 5.3&quot;
+  nVAL3MajorVers=0
+  l_nFile=0
+  l_nLine=0
+  l_nIndex=0
+  // check if file exist : This instruction returns TRUE if the path points to a file.
+  if ($fileExists(l_sFile)==false)
+    ////putln(l_sFile+&quot; not found.&quot;)
+    return
+  endIf
+  // open the file : The returned value is an integer in [0-9] that must be used for further file access. If negative, the file could not be open.
+  l_nFile=$fileOpen(l_sFile,&quot;r&quot;)
+  if (l_nFile&lt;0)
+    putln(&quot;Could not open &quot;+l_sFile)
+    return
+  endIf
+  // read first 10 lines and close file
+  // This instruction reads nNbLines lines, stores each line in an entry of the variable nLines, and returns the number of effectively read lines
+  l_nLine=$fileGet(l_nFile,l_sLine,size(l_sLine))
+  $fileClose(l_nFile)
+  // search version in these lines
+  do
+    l_nLine=l_nLine-1
+    //putln(toString(&quot;1&quot;,l_nLine)+&quot;: &quot;+l_sLine[l_nLine])
+    l_nIndex=find(l_sLine[l_nLine],&quot;&lt;CS8Version&gt;&quot;)
+    if (l_nIndex&gt;0)
+      x_sVersion=mid(l_sLine[l_nLine],7,l_nIndex+13)
+      call SerialStr2Num(x_sVersion,nVAL3MajorVers,nVAL3MinorVers)
+      x_sVersion=toString(&quot;0.1&quot;,nVAL3MajorVers)
+      if nVAL3MinorVers&gt;0
+        x_sVersion=x_sVersion+&quot;.&quot;+toString(&quot;&quot;,nVAL3MinorVers)
+      endIf
+    endIf
+  until (l_nLine&lt;=0) or (l_nIndex&gt;0)
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

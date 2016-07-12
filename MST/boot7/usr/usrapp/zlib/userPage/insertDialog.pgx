@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="insertDialog" public="true">
+    <description />
+    <paramSection>
+      <param name="x_sMsg" type="string" byVal="true" />
+      <param name="x_nItem" type="num" byVal="false" />
+      <param name="x_nMin" type="num" byVal="true" />
+      <param name="x_nMax" type="num" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="l_nStartLine" type="num" size="1" />
+      <local name="l_nLine" type="num" size="1" />
+      <local name="i" type="num" size="1" />
+      <local name="l_nPX" type="num" size="1" />
+      <local name="l_nPY" type="num" size="1" />
+      <local name="l_sItem" type="string" size="1" />
+      <local name="l_sMessage" type="string" size="1" />
+      <local name="l_sTemp" type="string" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //
+  // modify the x_sItem, the procedure will return the x,y pos
+  //
+  if watch(bShowDialog==false,2)==false
+    bShowDialog=false
+    logMsg("error dialog resoursing")
+    return
+  else
+    setMutex(bShowDialog)
+    call listempty()
+    //
+    call clear(0,13)
+    //
+    l_sItem=toString("",x_nItem)
+    x_sMsg=x_sMsg+"&gt;"+l_sItem
+    call stringCopy(x_sMsg,sMessage)
+    call divideString(sMessage,l_nLine)
+    l_nStartLine=round(5-l_nLine/2)
+    // Start LINE
+    call type(0,l_nStartLine-2,"┌──────────────────────────────────────┐")
+    call type(0,l_nStartLine-1,"│                                      │")
+    // write the message
+    for i=0 to l_nLine
+      //call type(,"                                      ")
+      l_sMessage=sMessage[i]
+      call typeCenter(i+l_nStartLine,l_sMessage,38,false)
+      call type(0,l_nStartLine+i,"│"+l_sMessage+"│")
+    endFor
+    // end LINE
+    call type(0,l_nStartLine+l_nLine+1,"│                                      │")
+    call type(0,l_nStartLine+l_nLine+2,"└──────────────────────────────────────┘")
+    call findPos(l_sMessage,"&gt;",l_nPX)
+    l_nPX=l_nPX+2
+    //l_nPX=find(l_sMessage,"&gt;")+2
+    l_nPY=l_nStartLine+l_nLine
+    // change the value
+    call changeValue(x_nItem,x_nMin,x_nMax,l_nPX,l_nPY,l_sTemp)
+    //
+    bShowDialog=false
+    bUseRefresh=true
+    //
+    delay(0)
+  endIf
+end
+
+</code>
+    </source>
+  </program>
+</programList>

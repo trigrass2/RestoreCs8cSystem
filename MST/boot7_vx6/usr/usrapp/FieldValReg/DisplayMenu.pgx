@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="DisplayMenu" public="false">
+    <description />
+    <paramSection />
+    <localSection>
+      <local name="l_nCycle" type="num" size="1" />
+      <local name="l_bResult" type="bool" size="1" />
+      <local name="l_nTouche" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  cls()
+  //Message d'avertissement au début de l'appli  
+  call UP:typeCenterMulti("! CAUTION !",1)
+  call UP:typeCenterMulti("To use this application properly, please refer to document 'Field ValReg procedure'",3)
+  call UP:typeCenterMulti("Press enter to continue",7)
+  l_nTouche=-1
+  while (l_nTouche!=270)
+    l_nTouche=get()
+  endWhile
+    
+  while bAppliRunning
+    //on init les variables
+    nActualStep=0
+    nPreviousStep=0
+    bAdjInProgress=false
+    sMessDisplayed=""
+    sUserMessage=""
+    bInteruption=false
+    bStop=false
+    jWanted={nNoFixed,nNoFixed,nNoFixed,nNoFixed,nNoFixed,nNoFixed}
+    //on affiche le menu principal
+    call Selection(l_nCycle)
+    //on arrive ici quand le choix est validé
+    switch l_nCycle
+      case 1
+        call RunAdjustement(5)
+        call RunAdjustement(4)
+        call RunAdjustement(3)
+        call RunAdjustement(2)
+        if bArmIsHSM==false
+          call RunAdjustement(6)
+        endIf
+        call RunAdjustement(7)       
+      break
+      case 2
+        call RunAdjustement(2)       
+      break
+      case 3
+        call RunAdjustement(3)
+      break
+      case 4
+        call RunAdjustement(4)        
+      break
+      case 5
+        call RunAdjustement(5)        
+      break
+      case 6
+        call RunAdjustement(6)       
+      break
+      case 7
+        call RunAdjustement(7)     
+      break
+      case 8
+        bAppliRunning=false
+        delay(1)
+        cls()
+      break
+    endSwitch
+    //si on a changé un réglage on demande si on enregistre dans la 
+    if bNewValues
+      call CopyInFD()
+    endIf
+    
+  endWhile
+  call stop()
+end
+</code>
+    </source>
+  </program>
+</programList>

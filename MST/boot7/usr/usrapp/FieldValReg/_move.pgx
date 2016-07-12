@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="_move" public="false">
+    <description />
+    <paramSection>
+      <param name="x_jJoint" type="joint" byVal="true" />
+      <param name="x_nJointFree" type="num" byVal="true" />
+      <param name="x_bResult" type="bool" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_jActual" type="joint" size="1" />
+      <local name="l_nActual" type="num" size="6" />
+      <local name="l_nWanted" type="num" size="6" />
+      <local name="i" type="num" size="1" />
+      <local name="l_nFixed" type="num" size="6" />
+      <local name="l_sMess" type="string" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  resetMotion()
+  l_nFixed[0]=x_jJoint.j1
+  l_nFixed[1]=x_jJoint.j2
+  l_nFixed[2]=x_jJoint.j3
+  l_nFixed[3]=x_jJoint.j4
+  l_nFixed[4]=x_jJoint.j5
+  l_nFixed[5]=x_jJoint.j6
+  
+  movej(x_jJoint,flange,mNomSpeed)
+  
+  do
+    if ((workingMode(l_nEtat)==1) and (l_nEtat==1))
+      resetMotion()
+      l_jActual=herej()
+      
+      l_nActual[0]=l_jActual.j1
+      l_nActual[1]=l_jActual.j2
+      l_nActual[2]=l_jActual.j3
+      l_nActual[3]=l_jActual.j4
+      l_nActual[4]=l_jActual.j5
+      l_nActual[5]=l_jActual.j6
+      
+      l_sMess=""
+      for i=0 to 5
+        if (bAnd(x_nJointFree,nJoint[i])==nJoint[i])
+          l_nWanted[i]=l_nActual[i]
+          l_sMess=l_sMess+"joint"+toString("1.1",i+1)+", "
+        else
+          l_nWanted[i]=l_nFixed[i]
+        endIf     
+      endFor
+      l_sMess=l_sMess+"is/are free"
+      //popUpMsg(l_sMess)   
+      
+      x_jJoint.j1=l_nWanted[0]
+      x_jJoint.j2=l_nWanted[1]
+      x_jJoint.j3=l_nWanted[2]
+      x_jJoint.j4=l_nWanted[3]
+      x_jJoint.j5=l_nWanted[4]
+      x_jJoint.j6=l_nWanted[5]
+      
+      movej(x_jJoint,flange,mNomSpeed)
+    endIf
+    delay(0)
+  until isEmpty() or (bInteruption==true) or (bStop==true)
+    
+  if bInteruption
+    resetMotion()
+    x_bResult=false
+    bInteruption=false
+  else 
+    waitEndMove()
+    x_bResult=true
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

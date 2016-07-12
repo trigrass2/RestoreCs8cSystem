@@ -1,0 +1,11 @@
+user #LOGIN# #PASSWORD#
+hash on
+cd /sys
+lcd #PATH#\sys
+asc
+del bootline.dat
+send #TEMP#\sys\bootline.dat bootline.dat
+bin
+del bootrom.sys
+send #TARGET#.sys bootrom.sys
+quit

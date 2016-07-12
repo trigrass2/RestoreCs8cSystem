@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="showBoolStatus" public="true" >
+    <description />
+    <paramSection>
+      <param name="x_bStatus" type="bool" byVal="true" />
+      <param name="x_sEvent" type="string" byVal="false" />
+    </paramSection>
+    <localSection/>
+    <source>
+      <code>begin
+  if x_bStatus
+    x_sEvent=&quot;[x]&quot;
+  else
+    x_sEvent=&quot;[ ]&quot;
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="editNumField" public="true">
+    <description />
+    <paramSection>
+      <param name="x_sTitle" type="string" byVal="true" />
+      <param name="x_sItemName" type="string" byVal="false" />
+      <param name="x_nItem" type="num" byVal="false" />
+      <param name="x_nMin" type="num" byVal="false" />
+      <param name="x_nMax" type="num" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="j" type="num" size="1" />
+      <local name="l_nSize" type="num" size="1" />
+      <local name="l_nKey" type="num" size="1" />
+      <local name="l_sEvent" type="string" size="1" />
+      <local name="l_nIndex" type="num" size="1" />
+      <local name="l_nField" type="num" size="1" />
+      <local name="l_sItem" type="string" size="1" />
+      <local name="l_sTemp" type="string" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //
+  // clear &amp; copy
+  //
+  nView=nFirst=0
+  //call listempty()
+  call numCopy(x_nItem,nOldValue)
+  //
+  l_nSize=size(x_nItem)-1
+  // create the LIST
+  call setSizeList(7,max((6-l_nSize/2)-2,2),23,min((l_nSize+1),8))
+  call listcreate(x_sTitle)
+  //
+  // insert items
+  //
+  for j=0 to l_nSize
+    l_sItem=x_sItemName[j]
+    if l_sItem!=""
+      call strlength(l_sItem,15)
+      l_sItem=l_sItem+": "+toString(".1",x_nItem[j])
+      call listadd(l_sItem)
+    endIf
+  endFor
+  call listupdate(0)
+  do
+    call clear(0,13)
+    call typeMenu(8,"OK")
+    l_nKey=get()
+    call listevent(l_nKey,l_nIndex,l_sEvent)
+    // on Enter Key
+    if l_nKey==270
+      if size(x_nMin)==size(x_nItem)
+        // use min and max
+        call changeValue(x_nItem[l_nIndex],x_nMin[l_nIndex],x_nMax[l_nIndex],15+10,nView+nTopY+1,l_sTemp)
+      else
+        call changeValue(x_nItem[l_nIndex],0,0,15+10,nView+nTopY+1,l_sTemp)
+      endIf
+      // UPDATE
+      call listdel(l_nIndex)
+      l_sItem=x_sItemName[l_nIndex]
+      call strlength(l_sItem,15)
+      l_sItem=l_sItem+": "+toString(".1",x_nItem[l_nIndex])
+      call listins(l_sItem,l_nIndex)
+      call listupdate(l_nIndex-nView)
+    endIf
+    delay(0)
+  until l_nKey==278 or l_nKey==255
+  // escape use????
+  if l_nKey==255
+    bUseEscape=true
+    call numCopy(nOldValue,x_nItem)
+  else
+    bUseEscape=false
+  endIf
+  // exit
+  call nullKey(l_nKey)
+end
+
+</code>
+    </source>
+  </program>
+</programList>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="CheckWorkingMod" public="false">
+    <description />
+    <paramSection>
+      <param name="x_bResult" type="bool" byVal="false" />
+    </paramSection>
+    <localSection />
+    <source>
+      <code>begin
+  x_bResult=(workingMode()==1)
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

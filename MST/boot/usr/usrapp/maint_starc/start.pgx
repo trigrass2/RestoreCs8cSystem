@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="start" public="false">
+    <description />
+    <paramSection />
+    <localSection>
+      <local name="l_bEnd" type="bool" size="1" />
+      <local name="l_bBkpFound" type="bool" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+
+  call a_Version()
+  cls()
+  userPage()
+  //nLineDisplay=1
+  call up:typeCenter(1,"*** STARC UPDATE ***",30,true)
+  
+  // delete arm.cfx from usb to use one from robot
+  // because if the boot is on version &lt;5.2 (arm.cf on flash)
+  // an arm.cfx is created on the USB and will be used for next boot on USB
+  // ==&gt; pb if work on another robot
+  if $fileExists("USB0://boot/usr/configs/arm.cfx")
+    cls()
+    call up:type(0,3,"!! WARNING  arm.cfx file was found on USB key")
+    call up:type(0,4,"and has been used for booting the system")
+    sRobotType=getVersion("ArmType")
+    sRobotTuning=getVersion("Tuning")
+    call up:type(0,5,"Is your robot a : "+sRobotType+sRobotTuning+" ?")
+    call up:type(0,6,"If NO  Press F1 and restart the system")
+    call up:type(0,7,"If YES Press F8 to proceed")
+    if get()==271
+      $delete("USB0://boot/usr/configs/arm.cfx")
+      cls()
+      call up:type(0,1,"ARM.CFX has been deleted for USB key")
+      call up:type(0,1,"Reboot with the USB key to have the correct type. Press a key")
+      get()
+      return
+    endIf
+    wait(getKey()==278)
+    // in any case delete the file from USB key
+    $delete("USB0://boot/usr/configs/arm.cfx")
+    cls()
+  endIf
+  // detect of all  system versions
+  call init(l_bEnd)
+  if !l_bEnd
+    return
+  endIf
+  // allow to recover the old starc version
+  call searchBkp(l_bBkpFound)
+  if l_bBkpFound
+    cls()
+    title(sStrUpdVers+" - Restore from backup")
+    call up:type(0,1,"A backup is present on your USB key")
+    call up:type(0,3,"press F1 key to restore or any key to proceed")
+    if get()==271
+      // ask for restore old starc version from bkp on USB
+      call restoreStarc(l_bEnd)
+      return
+    endIf
+  endIf
+  // test if robot starc version is less than 1.13, if yes install last 1.13
+  call upFrom12To13(l_bEnd)
+  if l_bEnd
+    return
+  endIf
+  // test if robot starc version is &gt;1.12 and &lt; last 1.13, if yes install last 1.13
+  call upToLast13(l_bEnd)
+  if l_bEnd
+    return
+  endIf
+  // ask for installing last starc version from USB
+  call upToLast(l_bEnd)
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="ProjectNameSpace">
+  <parameters version="s6.8" stackSize="5000" millimeterUnit="true" />
+  <programSection>
+    <program file="getUsbBootPath.pgx" />
+    <program file="setTextMode.pgx" />
+  </programSection>
+  <dataSection>
+    <data file="val3Function_s6.dtx" />
+  </dataSection>
+  <aliasSection>
+    <alias name="io" interface="io" autoload="true" />
+  </aliasSection>
+</project>

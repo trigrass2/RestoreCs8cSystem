@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="restoreStarc" public="false">
+    <description />
+    <paramSection>
+      <param name="x_bEnd" type="bool" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="l_bOk" type="bool" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  cls()
+  title(sStrUpdVers+" - Restoration procedure ")
+  call up:type(0,1,"You will recover the previous starc version from USB key for this robot")
+  call up:type(0,3,"Press F8 key to confirm, another key to end")
+  if get()!=278
+    x_bEnd=false
+    return
+  endIf
+  call up:typeCenter(6,"File copying.........",30,true)
+  call up:typeCenter(8,"DO NOT SWITCH OFF CABINET OR UNPLUG USB KEY",38,true)
+  call restoreSYSTEMcf(l_bOk)
+  if l_bOk
+    call up:type(0,10,"SYSTEM.CF has been recovered....")
+  else
+    call up:type(0,10,"!!! ERROR during copy of SYSTEM.CF from Usb key,")
+    call up:type(0,12,"Recovering STARC files....")
+  endIf
+  call restorStarcFile(l_bOk)
+  cls()
+  if l_bOk
+    call up:type(0,1,"Files have been recovered, unplug USB key,")
+    call up:type(0,2,"reboot the controller, and follow the procedure")
+  else
+    call up:type(0,1,"Error during file copy, unplug USB key,")
+    call up:type(0,2,"reboot the controller, check if robot is calibrated,")
+    call up:type(0,3,"and running, if not reinstall VAL3 version from CD")
+  endIf
+  x_bEnd=true
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

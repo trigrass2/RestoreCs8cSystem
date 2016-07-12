@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="upFrom12To13" public="false" >
+    <description />
+    <paramSection>
+      <param name="x_bEnd" type="bool" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_sUSBPath" type="string" size="1" />
+      <local name="l_bOk" type="bool" size="1" />
+      <local name="l_sUSBFullPath" type="string" size="1" />
+      <local name="l_nErr" type="num" size="1" />
+      <local name="l_sVersion" type="string" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  // no update to do here
+  if nStarcMajorVers&gt;1.12
+    x_bEnd=false
+    return
+  endIf
+  // update to last 1.13
+  call findStarcOnUSB(1.13,l_sUSBPath)
+  if l_sUSBPath!=&quot;&quot;
+    cls()
+    call up:type(0,1,&quot;Your system needs to be updated to &quot;+l_sUSBPath)
+    call up:type(0,5,&quot;Press F1 key to proceed or another key to cancel&quot;)
+    if get()==271
+      call copyStarc13(l_sUSBPath,l_bOk)
+      cls()
+      if l_bOk
+        call up:type(0,1,&quot;Files have been copied, unplug USB key,&quot;)
+        call up:type(0,2,&quot;reboot the controller, and follow the procedure&quot;)
+      else
+        call up:type(0,1,&quot;Error during file copy, unplug USB key,&quot;)
+        call up:type(0,2,&quot;reboot the controller, check if robot is calibrated,&quot;)
+        call up:type(0,3,&quot;and running, if not reinstall VAL3 version from CD&quot;)
+      endIf
+      call up:type(0,8,&quot;Press a key to proceed&quot;)
+      get()
+    endIf
+  endIf
+  x_bEnd=true
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

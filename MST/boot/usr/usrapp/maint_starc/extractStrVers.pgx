@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="extractStrVers" public="false" >
+    <description>extract Version from version.cfx file</description>
+    <paramSection>
+      <param name="nErr" type="num" byVal="false" />
+      <param name="x_sFile" type="string" byVal="true" />
+      <param name="x_sVersion" type="string" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_nFile" type="num" size="1" />
+      <local name="l_sLine" type="string" size="5" />
+      <local name="l_nLine" type="num" size="1" />
+      <local name="l_bFound" type="bool" size="1" />
+      <local name="l_nIndex" type="num" size="1" />
+      <local name="l_nMaj" type="num" size="1" />
+      <local name="l_nMid" type="num" size="1" />
+      <local name="l_nMin" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  // init
+  x_sVersion=&quot;&quot;
+  l_nFile=0
+  l_nLine=0
+  l_bFound=false
+  l_nIndex=0
+  // check if file exist : This instruction returns TRUE if the path points to a file.
+  if ($fileExists(x_sFile)==false)
+    putln(x_sFile+&quot; not found.&quot;)
+    nErr=-200
+  else
+    // open the file : The returned value is an integer in [0-9] that must be used for further file access. If negative, the file could not be open.
+    l_nFile=$fileOpen(x_sFile,&quot;r&quot;)
+    if (l_nFile&lt;0)
+      putln(&quot;Could not open &quot;+x_sFile)
+      nErr=-201
+    else
+      // read first 10 lines and close file
+      // This instruction reads nNbLines lines, stores each line in an entry of the variable nLines, and returns the number of effectively read lines
+      l_nLine=$fileGet(l_nFile,l_sLine,size(l_sLine))
+      $fileClose(l_nFile)
+      // search version in these lines
+      do
+        l_nLine=l_nLine-1
+        //putln(toString(&quot;1&quot;,l_nLine)+&quot;: &quot;+l_sLine[l_nLine])
+        l_nIndex=find(l_sLine[l_nLine],&quot;StarcVersion&quot;)
+        if (l_nIndex&gt;0)
+          l_nIndex=find(l_sLine[l_nLine],&quot;value=&quot;)
+          if (l_nIndex&gt;0)
+            x_sVersion=mid(l_sLine[l_nLine],8,l_nIndex+7)
+            l_bFound=true
+          endIf
+        endIf
+      until (l_nLine&lt;=0) or (l_bFound==true)
+      if (l_bFound==false)
+        nErr=-202
+        //        putln(&quot;Invalid Starc package (file &quot;+x_sFile+&quot; do not contain StarcVersion&quot;)
+        //        put(&quot;l_nIndex=&quot;+toString(&quot;1.0&quot;,l_nIndex)+&quot; ; &quot;)
+        //        put(&quot;l_nLine=&quot;+toString(&quot;1.0&quot;,l_nLine)+&quot; ; &quot;)
+        //        putln(&quot;l_bFound=false&quot;)
+      else
+        call extractNumVers(nErr,x_sVersion,l_nMaj,l_nMid,l_nMin)
+        x_sVersion=toString(&quot;&quot;,l_nMaj)+&quot;.&quot;+toString(&quot;&quot;,l_nMid)
+        if l_nMin&gt;0
+          x_sVersion=x_sVersion+&quot;.&quot;+toString(&quot;&quot;,l_nMin)
+        endIf
+      endIf
+    endIf
+  endIf
+end
+
+      
+      </code>
+    </source>
+  </program>
+</programList>

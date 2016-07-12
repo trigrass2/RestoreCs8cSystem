@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="typeCenterMulti" public="true">
+    <description />
+    <paramSection>
+      <param name="x_sMsg" type="string" byVal="true" />
+      <param name="x_nY" type="num" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="l_nTime" type="num" size="1" />
+      <local name="l_nStartLine" type="num" size="1" />
+      <local name="l_nLine" type="num" size="1" />
+      <local name="i" type="num" size="1" />
+      <local name="l_sMessage" type="string" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //-----------------------------------------------------------------------
+  //Header begin
+  //Description of program
+  //  Displays a dialog box from the data message. After called this program,
+  //  you will regenerate your interface.
+  //
+  //Input parameters
+  //  string x_sMsg :
+  //    role : Message that you want to display
+  //  num x_nTime :
+  //    role : Waiting time before restoring the main
+  //
+  //Example
+  //  call timerDialog("Hello",2)
+  //
+  //History
+  //  Creation : 28-04-08 - f.Rob
+  //Header end
+  //-----------------------------------------------------------------------
+  
+  //Use for other task
+  //If "timerDialog" is already used, put a message error and return in
+  //the calling program
+  
+  //Copy all the values from the first element to the second one
+  call stringCopy(x_sMsg,sMessage)
+  //Divide the message if it is too long (Search a space for cut the message)
+  //Return the numbers of lines used for writing the message.
+  call divideString(sMessage,l_nLine)
+  l_nStartLine=x_nY
+  //Write the message
+  for i=0 to l_nLine
+    l_sMessage=sMessage[i]
+    //Displays the message in center of the box
+    call typeCenter(i+l_nStartLine,l_sMessage,38,true)
+  endFor
+  bUseRefresh=true
+  delay(0)
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

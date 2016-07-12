@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="ProjectNameSpace">
+  <parameters version="s6.6.1" stackSize="5000" millimeterUnit="true" />
+  <programSection>
+    <program file="changeValue.pgx" />
+    <program file="clear.pgx" />
+    <program file="divideString.pgx" />
+    <program file="editNumField.pgx" />
+    <program file="fhmns.pgx" />
+    <program file="findPos.pgx" />
+    <program file="getListPosition.pgx" />
+    <program file="getMenu.pgx" />
+    <program file="getView.pgx" />
+    <program file="hmns.pgx" />
+    <program file="initLib.pgx" />
+    <program file="insertDialog.pgx" />
+    <program file="isListEmpty.pgx" />
+    <program file="leftPos.pgx" />
+    <program file="listadd.pgx" />
+    <program file="listcreate.pgx" />
+    <program file="listcursor.pgx" />
+    <program file="listdel.pgx" />
+    <program file="listempty.pgx" />
+    <program file="listevent.pgx" />
+    <program file="listframe.pgx" />
+    <program file="listins.pgx" />
+    <program file="listread.pgx" />
+    <program file="listredraw.pgx" />
+    <program file="listupdate.pgx" />
+    <program file="midPos.pgx" />
+    <program file="nullKey.pgx" />
+    <program file="numCopy.pgx" />
+    <program file="printScroll.pgx" />
+    <program file="questionDialog.pgx" />
+    <program file="read.pgx" />
+    <program file="rightPos.pgx" />
+    <program file="selectNewField.pgx" />
+    <program file="setMenu.pgx" />
+    <program file="setSizeList.pgx" />
+    <program file="setTextMode.pgx" />
+    <program file="setView.pgx" />
+    <program file="showBoolStatus.pgx" />
+    <program file="strfill.pgx" />
+    <program file="strfillchr.pgx" />
+    <program file="stringCopy.pgx" />
+    <program file="stringToArray.pgx" />
+    <program file="strlength.pgx" />
+    <program file="timerDialog.pgx" />
+    <program file="type.pgx" />
+    <program file="typeCenter.pgx" />
+    <program file="typeCenterMulti.pgx" />
+    <program file="typeLen.pgx" />
+    <program file="typeMenu.pgx" />
+  </programSection>
+  <dataSection>
+    <data file="userPage.dtx" />
+  </dataSection>
+  <aliasSection>
+    <alias name="val3Function" interface="Disk://zlib/val3Function/val3Function_s6" autoload="false" />
+  </aliasSection>
+</project>

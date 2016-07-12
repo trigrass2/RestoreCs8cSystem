@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="strlength" public="false" >
+    <description />
+    <paramSection>
+      <param name="pStr" type="string" byVal="false" />
+      <param name="pLen" type="num" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="lStrEmpty" type="string" size="1" />
+      <local name="l_sTemp" type="string" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  lStrEmpty=&quot;                                        &quot;
+  // look for asian message
+  if getDisplayLen(pStr)&gt;pLen
+    // need to divide the message
+    if getDisplayLen(pStr)==len(pStr)
+      // european message
+      pStr=mid(pStr,pLen-1,0)
+      pStr=pStr+&quot;.&quot;
+    else
+      // asian one
+      call midPos(pStr,pLen,0,pStr)
+    endIf
+  else
+    if getDisplayLen(pStr)&lt;pLen
+      // european
+      if getDisplayLen(pStr)==len(pStr)
+        pStr=pStr+mid(lStrEmpty,pLen-getDisplayLen(pStr),0)
+      else
+        // asian
+        call midPos(lStrEmpty,pLen-getDisplayLen(pStr),0,l_sTemp)
+        pStr=pStr+l_sTemp
+      endIf
+    else
+      // they are the same
+      //
+    endIf
+  endIf
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

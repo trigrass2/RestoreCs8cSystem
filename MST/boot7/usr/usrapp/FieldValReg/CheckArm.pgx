@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="CheckArm" public="false">
+    <description />
+    <paramSection>
+      <param name="x_bOk" type="bool" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_sContSerialNb" type="string" size="1" />
+      <local name="l_sArmSerialNb" type="string" size="1" />
+      <local name="l_sArmType" type="string" size="1" />
+      <local name="l_nTouche" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  l_sArmType=getVersion("ArmType")
+  l_sArmSerialNb=getVersion("ArmSN")
+  l_sContSerialNb=getVersion("ControllerSN")
+
+  
+  cls()
+  title(" Arm verification "+sVersion)
+  
+  call UP:typeCenterMulti("Please check if the robot match with the informations below :",1)
+  call UP:type(1,4,"Arm Type : "+l_sArmType)
+  call UP:type(1,5,"Arm Serial Nbr : "+l_sArmSerialNb)
+  call UP:type(1,6,"Controler Serial Nbr : "+l_sContSerialNb)  
+  
+  call UP:type(6,8,"Are the informations correct ?")  
+  
+  call UP:typeMenu(7,"No")
+  call UP:typeMenu(8,"Yes")
+  
+  l_nTouche=-1
+  while (l_nTouche!=277) and (l_nTouche!=278)
+    l_nTouche=get()
+  endWhile
+  
+  x_bOk=(l_nTouche==278)
+  if x_bOk
+    if left(l_sArmType,8)=="rx170hsm"
+      bArmIsHSM=true
+    else
+      bArmIsHSM=false
+    endIf
+  endIf 
+  
+  end
+</code>
+    </source>
+  </program>
+</programList>

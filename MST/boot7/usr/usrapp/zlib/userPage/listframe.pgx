@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="listframe" public="false" >
+    <description />
+    <paramSection>
+      <param name="pTitle" type="string" byVal="true" />
+      <param name="pX" type="num" byVal="true" />
+      <param name="pY" type="num" byVal="true" />
+      <param name="pDx" type="num" byVal="true" />
+      <param name="pDy" type="num" byVal="true" />
+    </paramSection>
+    <localSection>
+      <local name="lDx" type="num" size="1" />
+      <local name="lDy" type="num" size="1" />
+      <local name="lI" type="num" size="1" />
+      <local name="lJ" type="num" size="1" />
+      <local name="lStr" type="string" size="1" />
+      <local name="lStrLine" type="string" size="1" />
+      <local name="lValue" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  //
+  // Staubli Copyright 2003 06 20
+  //
+  lStrLine=&quot;─────────────────────────────────────────&quot;
+  lDx=pDx
+  lDy=pDy
+  //Top
+  lStr=&quot;┌&quot;+mid(lStrLine,lDx,0)+&quot;┐&quot;
+  gotoxy(pX,pY)
+  put(lStr)
+  lValue=pX+2
+  //Title
+  if pTitle!=&quot;&quot;
+    call leftPos(&quot;┤&quot;+pTitle+&quot;├&quot;,lDx,pTitle)
+    gotoxy(pX+lDx-getDisplayLen(pTitle)+1,pY)
+    put(pTitle)
+  endIf
+  //Containt
+  for lJ=1 to lDy
+    lValue=pY+lJ
+    lStr=&quot;│&quot;
+    gotoxy(pX,lValue)
+    put(lStr)
+    gotoxy(pX+lDx+1,lValue)
+    put(lStr)
+  endFor
+  //Bottom
+  lValue=pY+lJ
+  lStr=&quot;└&quot;+mid(lStrLine,lDx,0)+&quot;┘&quot;
+  gotoxy(pX,lValue)
+  put(lStr)
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

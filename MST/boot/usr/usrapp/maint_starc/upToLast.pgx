@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<programList xmlns="ProgramNameSpace" >
+  <program name="upToLast" public="false" >
+    <description />
+    <paramSection>
+      <param name="x_bEnd" type="bool" byVal="false" />
+    </paramSection>
+    <localSection>
+      <local name="l_sUSBPath" type="string" size="1" />
+      <local name="l_bOk" type="bool" size="1" />
+      <local name="l_sUSBFullPath" type="string" size="1" />
+      <local name="l_nErr" type="num" size="1" />
+      <local name="l_sVersion" type="string" size="1" />
+      <local name="l_nUSBMaj" type="num" size="1" />
+      <local name="l_nUSBMin" type="num" size="1" />
+      <local name="l_nCode" type="num" size="1" />
+      <local name="l_bEnd" type="bool" size="1" />
+      <local name="l_nFpgaMaj" type="num" size="1" />
+      <local name="l_nFpgaMin" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  // check conditions for installing last version
+  // 1.16.5
+  // update to last
+  l_bEnd=false
+  title(sStrUpdVers+&quot; - Update to last STARC version&quot;)
+  cls()
+  // check if tuning is empty string to allow use of last in system.cf
+  if nVAL3MajorVers&lt;5.3
+    call up:typeCenter(1,&quot;VAL3 version is too old to enable new tuning&quot;,38,true)
+    call up:typeCenter(2,&quot;Update VAL3, to enable last tuning&quot;,38,true)
+    l_bEnd=true
+  endIf
+  $getStarcFpgaVs(l_nFpgaMaj,l_nFpgaMin)
+  if l_nFpgaMaj&lt;2
+    call up:type(0,2,&quot;Starc 1 not compatible with new tuning&quot;)
+    call up:type(0,3,&quot;Change to Starc 2&quot;)
+    call up:type(0,7,&quot;to be able to enable last tuning&quot;)
+    l_bEnd=true
+  endIf
+  call readArmCfx(l_nCode)
+  if l_bEnd or (l_nCode&lt;0)
+    call up:typeCenter(10,&quot;Press a key to end&quot;,38,true)
+    get()
+    return
+  endIf
+  call findStarcOnUSB(0,l_sUSBPath)
+  if l_sUSBPath!=&quot;&quot;
+    // verify from version.cfx that it is good
+    l_sUSBFullPath=&quot;USB0://starc/&quot;+l_sUSBPath+&quot;/versions.cfx&quot;
+    call extractStrVers(l_nErr,l_sUSBFullPath,l_sVersion)
+    if (l_nErr==0) and (l_sUSBPath==l_sVersion)
+      // Check VAL3 version is &gt; 5.2 to have benefit of friction compensation
+      call SerialStr2Num(l_sUSBPath,l_nUSBMaj,l_nUSBMin)
+      if (l_nUSBMaj&gt;nStarcMajorVers) or ((l_nUSBMaj==nStarcMajorVers) and (l_nUSBMin&gt;nStarcMinorVers))
+        call up:type(0,0,&quot;Your system can be updated to &quot;+l_sUSBPath)
+        call up:type(0,2,&quot;Conditions are met to update Starc to last version&quot;)
+        call up:type(0,4,&quot;WARNING !! in nominal conditions, latest starc version improves robot behaviour&quot;)
+        call up:type(0,6,&quot;but could have no effect or degrade in some particular cases&quot;)
+        call up:type(0,8,&quot;Press F8 to install it or any key to cancel&quot;)
+        call up:type(0,10,&quot;A backup will be done on a USB stick before installing. &quot;)
+        call up:type(0,11,&quot;It will be possible to recover original version by reboot&quot;)
+        call up:type(0,12,&quot; with this stick and select restoration&quot;)
+        if get()!=278
+          return
+        endIf
+        if !bBackupDone
+          call backup(l_bOk)
+          bBackupDone=l_bOk
+        endIf
+        cls()
+        call up:typeCenter(2,&quot;New starc file copying.........&quot;,38,true)
+        call up:typeCenter(6,&quot;DO NOT SWITCH OFF CABINET OR UNPLUG USB KEY&quot;,38,true)
+        call copyStarcFile(l_sUSBPath,l_bOk)
+        call up:typeCenter(4,&quot;SYSTEM.CF copying.........&quot;,38,true)
+        call copySYSTEMcf(l_bOk)
+        cls()
+        call up:type(0,1,&quot;Starc file have been copied.&quot;)
+        call up:type(0,2,&quot;SYSTEM.CF has been copied.&quot;)
+        call up:type(0,4,&quot;Unplug USB key, reboot the controller,&quot;)
+        call up:type(0,5,&quot;and follow the procedure, press a key...&quot;)
+        // ask for reboot
+      else
+        call up:typeCenter(7,&quot;No update, Press a key to end&quot;,38,true)
+      endIf
+    else
+      call up:type(0,1,&quot;Starc file on USB\Starc are corrupted : &quot;+l_sUSBPath)
+      call up:type(0,3,&quot;Press a key to end&quot;)
+    endIf
+  else
+    call up:type(0,1,&quot;No Starc file on USB\Starc.&quot;)
+    call up:type(0,3,&quot;Press a key to end&quot;)
+  endIf
+  get()
+end
+
+      </code>
+    </source>
+  </program>
+</programList>

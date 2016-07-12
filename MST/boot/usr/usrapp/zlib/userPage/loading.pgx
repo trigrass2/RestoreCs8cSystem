@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<programList xmlns="ProgramNameSpace">
+  <program name="loading" public="true">
+    <description />
+    <paramSection />
+    <localSection>
+      <local name="nTime" type="num" size="1" />
+    </localSection>
+    <source>
+      <code>begin
+  cls()
+  nTime=clock()
+  while clock()-nTime&gt;1
+    cls()
+    delay(0.3)
+  endWhile
+end
+    </code>
+    </source>
+  </program>
+</programList>

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="ProjectNameSpace">
+  <parameters version="s6.8" stackSize="10000" millimeterUnit="true" />
+  <programSection>
+    <program file="aaVersion.pgx" />
+    <program file="findBkp.pgx" />
+    <program file="info.pgx" />
+    <program file="progress.pgx" />
+    <program file="restoreArmCfx.pgx" />
+    <program file="selectSN.pgx" />
+    <program file="start.pgx" />
+    <program file="stop.pgx" />
+  </programSection>
+  <dataSection>
+    <data file="RestoreBkp.dtx" />
+  </dataSection>
+  <aliasSection>
+    <alias name="io" interface="io" autoload="true" />
+    <alias name="use" interface="Disk://zlib/userPage" autoload="true" />
+  </aliasSection>
+</project>
